@@ -22,9 +22,10 @@ const Auth = () => {
 
         <div className="form signup-form">
           <h2>Sign Up</h2>
-          <input type="text" placeholder="Full Name" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input type="text" name='name' placeholder="Full Name" />
+          <input type="email" name='email' placeholder="Email" />
+          <input type="password" name='password' placeholder="Password" />
+          <input type="number" name='number' placeholder='Contact number' />
           <button className="auth-btn">Sign Up</button>
           <p className="toggle-text">
             Already have an account?{' '}
