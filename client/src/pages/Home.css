@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+.Home-container {
+    min-height: 100vh;
+    width: 100%;
+    background-color: rgba(36, 36, 36);
+    position: relative;
+    overflow: hidden;
+}
+
+.Home-main {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+/* Initial image animation */
+.Home-main-img1 {
+    position: relative;
+    left: 850px;
+    height: 550px;
+    opacity: 0.7;
+    animation: slideInRight 1.2s ease-out forwards;
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+}
+
+/* Animated text from left */
+.Home-main-text {
+    position: relative;
+    bottom: 500px;
+    left: 100px;
+    color: #ff9d70;
+    font-family: "Dancing Script", cursive;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 25px;
+    font-style: normal;
+    opacity: 0;
+    animation: slideInLeft 1s ease-out forwards;
+    animation-delay: 1.2s;
+}
+
+.Home-main-text h3 {
+    position: relative;
+    left: 480px;
+}
+
+/* Bottom section animation (appear together) */
+.Home-main-text2,
+.Home-main-images,
+.Home-main-button {
+    opacity: 0;
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 2.4s;
+}
+
+.Home-main-text2 {
+    position: relative;
+    bottom: 400px;
+    left: 100px;
+    color: white;
+    font-family: "Zilla Slab", serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.Home-main-images {
+    position: relative;
+    bottom: 350px;
+    left: 100px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.Home-main-images p {
+    font-family: "Zilla Slab", serif;
+    font-weight: 600;
+    font-style: italic;
+    color: white;
+}
+
+.Home-main-button {
+    gap: 10px;
+    display: flex;
+    position: relative;
+    bottom: 300px;
+    left: 250px;
+}
+
+.Home-main-button button {
+    width: 120px;
+    background-color: #ff6837;
+    color: white;
+    font-family: "Zilla Slab", serif;
+    font-weight: 600;
+    font-style: italic;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Animations */
+@keyframes slideInRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 0.7;
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

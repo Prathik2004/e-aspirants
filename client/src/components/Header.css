@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+.header-container {
+    background-color: rgb(36, 36, 36);
+    color: white;
+    display: grid;
+    grid-template-areas: "logo navbar cart login";
+    grid-template-columns: 1fr 1fr 0.7fr 0.6fr;
+    align-items: center;
+    padding: 10px;
+}
+.header-logo {
+    grid-area: logo;
+}
+.header-navbar {
+    grid-area: navbar;
+    margin-left: 100px;
+}
+.header-cart{
+    grid-area: cart;
+    align-content: center;
+    margin-left: 200px;
+}
+.header-login {
+    grid-area: login;
+}
+.header-navbar-list {
+    cursor: pointer;
+    font-family: "Permanent Marker", cursive;
+    font-weight: 300;
+    font-size: 20px;
+    font-style: normal;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 0;
+    margin: 0;
+}
+.header-login-button,
+.header-signup-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: 1px solid rgb(1, 36, 34);
+    border-radius: 5px;
+    background-color: #ff6837;
+    cursor: pointer;
+
+}
+.header-logo-img {
+    max-width: 100%;
+    height: auto;
+}
+
