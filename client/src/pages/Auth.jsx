@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Auth.css';
+import Header from '../components/Header';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -7,6 +8,8 @@ const Auth = () => {
   const toggleForm = () => setIsLogin(!isLogin);
 
   return (
+    <>
+    <Header />
     <div className="auth-container">
       <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
         <div className="form login-form">
@@ -34,6 +37,7 @@ const Auth = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -38,6 +38,7 @@ const Home = () => {
           <div className="Home-main slide">
             <img src={Defence} alt="" className="Home-main-img1" width={600} height={200} ref={imgRef} />
             <div className="Home-main-text">
+            
               <h2>We live by <span>chance</span>, we love by <span>choice</span>, <br />we kill by <span>profession</span>.</h2>
               <h3> - Indian Army</h3>
             </div>
