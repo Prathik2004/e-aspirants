@@ -29,7 +29,7 @@ const Header = () => {
         </div>
         <div className="header-login">
             <NavLink to='/auth'><button className="header-login-button">Login</button></NavLink>
-            <button className="header-signup-button">Sign Up</button>
+            <NavLink to='/auth'><button className="header-signup-button">Sign Up</button></NavLink>
         </div>
     </div>
     </header>
