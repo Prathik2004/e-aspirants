@@ -1,0 +1,98 @@
+:root {
+  --primary-color: rgb(36, 36, 36);
+  --secondary-color: #ff6837;
+  --secondary-hover: #e65a28;
+  --input-bg: #2a2a2a;
+  --text-color: #f0f0f0;
+  --placeholder-color: #999;
+  --border-color: #444;
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.listing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: var(--primary-color);
+  min-height: 100vh;
+  
+}
+
+.listing-form {
+  background-color: #1f1f1f;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px var(--shadow);
+  max-width: 600px;
+  width: 100%;
+  display: grid;
+  gap: 20px;
+  animation: fadeIn 0.5s ease;
+  box-shadow: 0 0 20px #999; /* Added shadow here */
+}
+
+.listing-form h2 {
+  color: var(--secondary-color);
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.listing-form input,
+.listing-form textarea {
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.listing-form input::placeholder,
+.listing-form textarea::placeholder {
+  color: var(--placeholder-color);
+}
+
+.listing-form input:focus,
+.listing-form textarea:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 5px var(--secondary-color);
+  outline: none;
+}
+
+.listing-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.listing-form button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.listing-form button:hover {
+  background-color: var(--secondary-hover);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

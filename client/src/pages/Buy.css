@@ -1,0 +1,17 @@
+.Buy-container {
+  padding: 20px;
+}
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.book-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  width: 220px;
+}
+.book-card img {
+  border-radius: 5px;
+}

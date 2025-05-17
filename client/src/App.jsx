@@ -6,6 +6,8 @@ import Sell from './pages/Sell'
 import Contact from './pages/Contact'
 import './App.css'
 import Auth from './pages/Auth'
+import ProfileOrders from './pages/ProfileOrders'
+import Profile from './pages/Profile'
 
 function App() {
   return (
@@ -13,10 +15,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/buy" element={<Buy />} />
+          <Route path="/buy/" element={<Buy />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path='/profileorders' element={<ProfileOrders />} />
           </Routes>
       </BrowserRouter>
     </>
