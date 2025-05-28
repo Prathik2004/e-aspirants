@@ -22,7 +22,7 @@ connectDB();
 // Middleware
 app.use(cors(
   {
-    origin:"https://e-aspirants-83odngbpv-prathiksen-aps-projects.vercel.app/"
+    origin:"https://e-aspirants.vercel.app/"
   }
 ));
 app.use(express.json());
