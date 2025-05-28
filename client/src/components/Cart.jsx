@@ -71,7 +71,7 @@ const Cart = () => {
                   <li className="cart-item" key={item._id}>
                     <div className="cart-item-info">
                       <img
-                        src={`${import.meta.env.VITE_BACKEND_URL}/${item.productPhoto}`}
+                        src={`${import.meta.env.VITE_BACKEND_URL}${item.productPhoto}`}
                         alt={item.productName}
                         className="cart-item-img"
                         onError={(e) => {
