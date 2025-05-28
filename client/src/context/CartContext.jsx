@@ -48,7 +48,7 @@ export const CartProvider = ({ children }) => {
     if (!user) return; // no user logged in
 
     try {
-      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/cart`, 
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/cart`, 
         { cart: newCart }, 
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
