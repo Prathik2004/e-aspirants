@@ -116,7 +116,7 @@ const Buy = () => {
             {filteredBooks.map(book => (
               <div className="book-card" key={book._id}>
                 <img
-                  src={`http://localhost:5000/${book.productPhoto}`}
+                  src={`${import.meta.env.VITE_BACKEND_URL}${book.productPhoto}`}
                   alt={book.productName}
                   style={{ width: '200px' }}
                 />
