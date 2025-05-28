@@ -38,6 +38,7 @@ const Buy = () => {
                 <h3>{book.productName || 'Untitled'}</h3>
                 <p>{book.productDescription || 'No description available.'}</p>
                 <p>Price: ₹{book.productCost || 'N/A'}</p>
+                <button>Add to Cart</button>
               </div>
             ))}
           </div>

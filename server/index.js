@@ -38,6 +38,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Signup route
+// Signup route
 app.post('/api/signup', async (req, res) => {
   const { name, email, password, number } = req.body;
   try {
@@ -46,7 +47,8 @@ app.post('/api/signup', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const User = await User.create({
+    // Don't redeclare the model as a new const
+    const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
@@ -59,6 +61,7 @@ app.post('/api/signup', async (req, res) => {
     res.status(500).json({ message: 'Signup error', error: err.message });
   }
 });
+
 
 // Login route
 app.post('/api/login', async (req, res) => {

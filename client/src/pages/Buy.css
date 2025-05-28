@@ -1,17 +1,28 @@
 .Buy-container {
+  color: white;
+  background-color: rgb(36, 36, 36);
   padding: 20px;
 }
+
 .book-list {
+  color: white;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
+
 .book-card {
-  border: 1px solid #ddd;
+  border: 1px solid #444;
+  background-color: #2a2a2a;
   padding: 10px;
   border-radius: 8px;
   width: 220px;
 }
+
+.book-card:hover {
+  border: 1px solid #ff6837;
+}
+
 .book-card img {
   border-radius: 5px;
 }
