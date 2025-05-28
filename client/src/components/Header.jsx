@@ -52,7 +52,9 @@ const Header = () => {
         </div>
 
         <div className="header-cart">
+          <NavLink to='/cart' style={{ textDecoration: 'none', color: 'white' }}>
           <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Cart" className="header-cart-icon" width={30} height={30} />
+          </NavLink>
         </div>
 
         <div className="header-login" ref={dropdownRef} style={{ position: 'relative' }}>

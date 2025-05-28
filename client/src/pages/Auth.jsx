@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import './Auth.css';
 import Header from '../components/Header';
 
 const Auth = () => {
+  const { setUserAndCart } = useCart();
   const [isLogin, setIsLogin] = useState(true);
   const toggleForm = () => setIsLogin(!isLogin);
   const navigate = useNavigate();
@@ -23,28 +25,38 @@ const Auth = () => {
 
   // Submit handlers
   const handleLoginSubmit = async () => {
-  try {
-    const response = await fetch('http://localhost:5000/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(loginData),
-    });
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginData),
+      });
 
-    const result = await response.json();
-    if (response.ok) {
-      alert('Login successful!');
-      // Store token and user data in localStorage
-      localStorage.setItem('token', result.token);
-      localStorage.setItem('user', JSON.stringify(result.user));
-      navigate('/'); // Redirect to home page
-    } else {
-      alert(result.message || 'Login failed!');
+      const result = await response.json();
+      if (response.ok) {
+        alert('Login successful!');
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
+
+        setUserAndCart({
+          id: result.user.id,
+          name: result.user.name,
+          email: result.user.email,
+          token: result.token,
+          cart: result.user.cart,
+        });
+
+        navigate('/'); // Redirect to home page
+      }
+
+      else {
+        alert(result.message || 'Login failed!');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred during login.');
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    alert('An error occurred during login.');
-  }
-};
+  };
 
 
   const handleSignupSubmit = async () => {
@@ -74,7 +86,7 @@ const Auth = () => {
       <Header />
       <div className="auth-container">
         <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
-          
+
           {/* Login Form */}
           <div className="form login-form">
             <h2>Login</h2>

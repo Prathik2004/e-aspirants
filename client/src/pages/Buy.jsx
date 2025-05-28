@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
+import { useCart } from '../context/CartContext';
 import './Buy.css';
 
 const Buy = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
-
   const [sortOption, setSortOption] = useState('relevance');
   const [costFilter, setCostFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [categories, setCategories] = useState([]);
+
+
+  const { addToCart, cart, user } = useCart();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -17,6 +21,8 @@ const Buy = () => {
         const response = await axios.get('http://localhost:5000/api/books');
         setBooks(response.data);
         setFilteredBooks(response.data); // default view
+        const uniqueCategories = [...new Set(response.data.map(book => book.productCategory))];
+        setCategories(uniqueCategories);
       } catch (error) {
         console.error('Error fetching books:', error);
       }
@@ -28,21 +34,18 @@ const Buy = () => {
   useEffect(() => {
     let filtered = [...books];
 
-    // Apply cost filter
     if (costFilter) {
       if (costFilter === '0-300') filtered = filtered.filter(b => b.productCost <= 300);
       else if (costFilter === '300-500') filtered = filtered.filter(b => b.productCost > 300 && b.productCost <= 500);
       else if (costFilter === '500+') filtered = filtered.filter(b => b.productCost > 500);
     }
 
-    // Apply category filter
     if (categoryFilter) {
       filtered = filtered.filter(b =>
         b.productCategory.toLowerCase() === categoryFilter.toLowerCase()
       );
     }
 
-    // Apply sort
     if (sortOption === 'low-to-high') {
       filtered.sort((a, b) => a.productCost - b.productCost);
     } else if (sortOption === 'high-to-low') {
@@ -52,48 +55,61 @@ const Buy = () => {
     setFilteredBooks(filtered);
   }, [books, sortOption, costFilter, categoryFilter]);
 
+  // Handler for adding item to cart
+  const handleAddToCart = (book) => {
+    if (!user) {
+      alert('Please login to add items to your cart.');
+      return;
+    }
+    addToCart(book);
+  };
+
   return (
     <>
       <Header />
       <div className="Buy-container">
-        
         <div className="Buy-main">
 
           <div className="controls">
+            {/* Sorting and filters code remains unchanged */}
             <div className="sort-filter-container">
-              <div className="sort">
-                <label htmlFor="sort">Sort by:</label>
-                <select id="sort" onChange={e => setSortOption(e.target.value)} value={sortOption}>
+              <div className="filter-group">
+                <label htmlFor="sort">Sort By:</label>
+                <select id="sort" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
                   <option value="relevance">Relevance</option>
                   <option value="low-to-high">Price: Low to High</option>
                   <option value="high-to-low">Price: High to Low</option>
                 </select>
               </div>
 
-              <div className="filter">
-                <label htmlFor="cost">Filter by Cost:</label>
-                <select id="cost" onChange={e => setCostFilter(e.target.value)} value={costFilter}>
+              <div className="filter-group">
+                <label htmlFor="cost">Filter by Price:</label>
+                <select id="cost" value={costFilter} onChange={(e) => setCostFilter(e.target.value)}>
                   <option value="">All</option>
-                  <option value="0-300">₹0 - ₹300</option>
+                  <option value="0-300">Under ₹300</option>
                   <option value="300-500">₹300 - ₹500</option>
-                  <option value="500+">₹500+</option>
+                  <option value="500+">Above ₹500</option>
                 </select>
               </div>
 
-              <div className="filter">
-                <label htmlFor="category">Book Category:</label>
-                <select id="category" onChange={e => setCategoryFilter(e.target.value)} value={categoryFilter}>
+              <div className="filter-group">
+                <label htmlFor="category">Filter by Category:</label>
+                <select
+                  id="category"
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                >
                   <option value="">All</option>
-                  <option value="NDA">NDA</option>
-                  <option value="CDS">CDS</option>
-                  <option value="AFCAT">AFCAT</option>
-                  <option value="SSB">SSB Interview</option>
-                  <option value="Territorial Army">Territorial Army</option>
-                  <option value="CAPF">CAPF</option>
+                  {categories.map((category, index) => (
+                    <option key={index} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </div>
 
             </div>
+
           </div>
 
           <div className="book-list">
@@ -107,7 +123,9 @@ const Buy = () => {
                 <h3>{book.productName || 'Untitled'}</h3>
                 <p>{book.productDescription || 'No description available.'}</p>
                 <p>Price: ₹{book.productCost || 'N/A'}</p>
-                <button>Add to Cart</button>
+                <button onClick={() => handleAddToCart(book)}>
+                  {cart.find(item => item._id === book._id) ? 'Added' : 'Add to Cart'}
+                </button>
               </div>
             ))}
           </div>

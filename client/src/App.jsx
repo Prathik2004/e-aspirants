@@ -8,6 +8,8 @@ import './App.css'
 import Auth from './pages/Auth'
 import ProfileOrders from './pages/ProfileOrders'
 import Profile from './pages/Profile'
+import Cart from './components/Cart'
+import Checkout from './components/Checkout'
 
 function App() {
   return (
@@ -18,9 +20,11 @@ function App() {
           <Route path="/buy/" element={<Buy />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/profileorders' element={<ProfileOrders />} />
+          <Route path='/checkout' element={<Checkout />} />
           </Routes>
       </BrowserRouter>
     </>
