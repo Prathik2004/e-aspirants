@@ -1,28 +1,130 @@
 .Buy-container {
-  color: white;
-  background-color: rgb(36, 36, 36);
-  padding: 20px;
+  background-color: #1e1e1e;
+  padding: 30px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
 }
 
 .book-list {
-  color: white;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: center; /* center cards */
+}
+
+.floating-shape {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  background: linear-gradient(135deg, #ff6f91, #845ec2);
+  border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%;
+  filter: drop-shadow(0 0 15px #ff6f91aa);
+  transform-style: preserve-3d;
+  animation: floatRotate 8s ease-in-out infinite;
+  z-index: 0;
+  opacity: 0.3;
+  pointer-events: none;
+  transform-origin: center center;
+  translate: -50% -50%;
+  will-change: transform;
+  mix-blend-mode: screen; /* Adds a modern blending effect */
 }
 
 .book-card {
-  border: 1px solid #444;
-  background-color: #2a2a2a;
-  padding: 10px;
-  border-radius: 8px;
-  width: 220px;
+  width: 220px;  /* fixed width */
+  height: 400px; /* fixed height, adjust as needed */
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .book-card:hover {
-  border: 1px solid #ff6837;
+  border-color: #ff6837;
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(255, 104, 55, 0.3);
 }
 
 .book-card img {
-  border-radius: 5px;
+  max-width: 200px;
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
 }
+
+.book-card h3 {
+  margin: 8px 0;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+.book-card p {
+  flex-grow: 1; /* take remaining space */
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.book-card button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.book-card button:hover {
+  background-color: var(--secondary-hover);
+}
+
+.controls {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.sort-filter-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: #2a2a2a;
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.sort-filter-container label {
+  color: #ff6837;
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+.sort-filter-container select {
+  background-color: #1e1e1e;
+  color: white;
+  border: 1px solid #555;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.sort-filter-container select:focus {
+  outline: none;
+  border-color: #ff6837;
+  box-shadow: 0 0 5px rgba(255, 104, 55, 0.6);
+}
+

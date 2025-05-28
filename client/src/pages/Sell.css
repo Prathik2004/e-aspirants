@@ -86,6 +86,31 @@ body {
   background-color: var(--secondary-hover);
 }
 
+.listing-form select {
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.listing-form select:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 5px var(--secondary-color);
+  outline: none;
+}
+
+.listing-form select option {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+
 @keyframes fadeIn {
   from {
     opacity: 0;

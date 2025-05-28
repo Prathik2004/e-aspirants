@@ -1,115 +1,87 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import Defence from '../assets/Defence.png';
-import './Home.css';
 import Man from '../assets/man.png';
 import Book from '../assets/book.png';
 import Author from '../assets/writer.png';
 import { NavLink } from 'react-router-dom';
+import './Home.css';
 
 const Home = () => {
   const imgRef = useRef(null);
-  const [currentSlide, setCurrentSlide] = useState(0); // slide index
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (imgRef.current) {
-        imgRef.current.style.transform = `translate(${scrollY * -0.2}px, ${scrollY * 0.3}px)`;
+        imgRef.current.style.transform = `translate(${scrollY * -0.15}px, ${scrollY * 0.25}px)`;
       }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % 3); // 2 slides
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + 3 ) % 3);
-
   return (
     <>
       <Header />
-      <div className="Home-container">
-        <div className="arrow left-arrow" onClick={prevSlide}>&lt;</div>
-        <div className="arrow right-arrow" onClick={nextSlide}>&gt;</div>
+      <section className="home-container" role="main" aria-label="Homepage">
+        {/* 3D floating background shape */}
+        <div className="floating-shape" aria-hidden="true"></div>
 
-        <div className="slider" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+        <motion.div
+          className="slide"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          <div className="slide-content">
+            <motion.img
+              src={Defence}
+              alt="Defence themed background"
+              className="slide-img"
+              ref={imgRef}
+              initial={{ opacity: 0.7, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1 }}
+            />
 
-          {/* Slide 1 */}
-          <div className="Home-main slide">
-            <img src={Defence} alt="" className="Home-main-img1" width={600} height={200} ref={imgRef} />
-            <div className="Home-main-text">
-            
-              <h2>We live by <span>chance</span>, we love by <span>choice</span>, <br />we kill by <span>profession</span>.</h2>
-              <h3> - Indian Army</h3>
-            </div>
-            <div className="Home-main-text2">
-              <h3>Join the community of 1,00,000+ aspirants and get access to the best study material,<br />
-                test series, and mentorship.
-              </h3>
-            </div>
-            <div className="Home-main-images">
-              <img src={Man} alt="Man" className='Home-main-man' width={40} height={40} />
-              <p>10000+ people</p>
-              <img src={Book} alt="Book" className='Home-main-man' width={40} height={40} />
-              <p>1000+ books</p>
-              <img src={Author} alt="Author" className='Home-main-man' width={40} height={40} />
-              <p>100+ authors</p>
-            </div>
-            <div className="Home-main-button">
-              <NavLink to='/buy'><button className='Home-main-button1'>Explore Books</button></NavLink>
-              <button className='Home-main-button2'>Contact Us</button>
+            <div className="text-wrapper">
+              <h2 className="slide-heading">
+                We live by <span>chance</span>, we love by <span>choice</span>,<br />
+                we kill by <span>profession</span>.
+              </h2>
+              <h3 className="slide-subheading">- Indian Army</h3>
+
+              <p className="slide-description">
+                Join the community of 1,00,000+ aspirants and get access to the best study material, test series, and mentorship.
+              </p>
+
+              <div className="slide-stats">
+                <div className="stat-item">
+                  <img src={Man} alt="" aria-hidden="true" />
+                  <span>10000+ people</span>
+                </div>
+                <div className="stat-item">
+                  <img src={Book} alt="" aria-hidden="true" />
+                  <span>1000+ books</span>
+                </div>
+                <div className="stat-item">
+                  <img src={Author} alt="" aria-hidden="true" />
+                  <span>100+ authors</span>
+                </div>
+              </div>
+
+              <div className="slide-buttons">
+                <NavLink to="/buy">
+                  <button className="btn-primary">Explore Books</button>
+                </NavLink>
+                <button className="btn-secondary">Contact Us</button>
+              </div>
             </div>
           </div>
-
-          {/* Slide 2 — same structure for now */}
-          <div className="Home-main slide">
-            <img src={Defence} alt="" className="Home-main-img1" width={600} height={200} />
-            <div className="Home-main-text">
-              <h2>Another Slide Title</h2>
-              <h3>- New Quote</h3>
-            </div>
-            <div className="Home-main-text2">
-              <h3>This is the second screen. You can customize this text and photo later.</h3>
-            </div>
-            <div className="Home-main-images">
-              <img src={Man} alt="Man" className='Home-main-man' width={40} height={40} />
-              <p>New Stat</p>
-              <img src={Book} alt="Book" className='Home-main-man' width={40} height={40} />
-              <p>More Books</p>
-              <img src={Author} alt="Author" className='Home-main-man' width={40} height={40} />
-              <p>Authors</p>
-            </div>
-            <div className="Home-main-button">
-              <NavLink to='/buy'><button className='Home-main-button1'>Explore Books</button></NavLink>
-              <button className='Home-main-button2'>Contact Us</button>
-            </div>
-          </div>
-
-          {/* Slide 3 — same structure for now */}
-          <div className="Home-main slide">
-            <img src={Defence} alt="" className="Home-main-img1" width={600} height={200} />
-            <div className="Home-main-text">
-              <h2>Another Slide Title</h2>
-              <h3>- New Quote</h3>
-            </div>
-            <div className="Home-main-text2">
-              <h3>This is the second screen. You can customize this text and photo later.</h3>
-            </div>
-            <div className="Home-main-images">
-              <img src={Man} alt="Man" className='Home-main-man' width={40} height={40} />
-              <p>New Stat</p>
-              <img src={Book} alt="Book" className='Home-main-man' width={40} height={40} />
-              <p>More Books</p>
-              <img src={Author} alt="Author" className='Home-main-man' width={40} height={40} />
-              <p>Authors</p>
-            </div>
-            <div className="Home-main-button">
-              <NavLink to='/buy'><button className='Home-main-button1'>Explore Books</button></NavLink>
-              <button className='Home-main-button2'>Contact Us</button>
-            </div>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+      </section>
     </>
   );
 };
