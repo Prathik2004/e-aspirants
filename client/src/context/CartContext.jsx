@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
       // (You can extend API to fetch cart separately)
       // setCart(user.cart || []);
       // Let's fetch fresh from /user route that returns user + cart
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCart(res.data.cart || []);

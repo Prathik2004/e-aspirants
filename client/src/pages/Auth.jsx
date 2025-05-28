@@ -26,97 +26,98 @@ const Auth = () => {
   // Submit handlers
   const handleLoginSubmit = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/login`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
+        credentials: 'include', // ✅ ADD THI
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert('Login successful!');
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+
+      setUserAndCart({
+        id: result.user.id,
+        name: result.user.name,
+        email: result.user.email,
+        token: result.token,
+        cart: result.user.cart,
       });
 
-      const result = await response.json();
-      if (response.ok) {
-        alert('Login successful!');
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('user', JSON.stringify(result.user));
-
-        setUserAndCart({
-          id: result.user.id,
-          name: result.user.name,
-          email: result.user.email,
-          token: result.token,
-          cart: result.user.cart,
-        });
-
-        navigate('/'); // Redirect to home page
-      }
-
-      else {
-        alert(result.message || 'Login failed!');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('An error occurred during login.');
+      navigate('/'); // Redirect to home page
     }
-  };
 
-
-  const handleSignupSubmit = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(signupData),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert('Signup successful!');
-        console.log(result);
-        setIsLogin(true); // Switch to login form
-      } else {
-        alert(result.message || 'Signup failed!');
-      }
-    } catch (error) {
-      console.error('Signup error:', error);
-      alert('An error occurred during signup.');
+    else {
+      alert(result.message || 'Login failed!');
     }
-  };
+  } catch (error) {
+    console.error('Login error:', error);
+    alert('An error occurred during login.');
+  }
+};
 
-  return (
-    <>
-      <Header />
-      <div className="auth-container">
-        <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
 
-          {/* Login Form */}
-          <div className="form login-form">
-            <h2>Login</h2>
-            <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
-            <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
-            <button className="auth-btn" onClick={handleLoginSubmit}>Login</button>
-            <p className="toggle-text">
-              Don't have an account?{' '}
-              <span onClick={toggleForm}>Sign Up</span>
-            </p>
-          </div>
+const handleSignupSubmit = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(signupData),
+    });
 
-          {/* Signup Form */}
-          <div className="form signup-form">
-            <h2>Sign Up</h2>
-            <input type="text" name="name" placeholder="Full Name" value={signupData.name} onChange={handleSignupChange} />
-            <input type="email" name="email" placeholder="Email" value={signupData.email} onChange={handleSignupChange} />
-            <input type="password" name="password" placeholder="Password" value={signupData.password} onChange={handleSignupChange} />
-            <input type="number" name="number" placeholder="Contact number" value={signupData.number} onChange={handleSignupChange} />
-            <button className="auth-btn" onClick={handleSignupSubmit}>Sign Up</button>
-            <p className="toggle-text">
-              Already have an account?{' '}
-              <span onClick={toggleForm}>Login</span>
-            </p>
-          </div>
+    const result = await response.json();
+    if (response.ok) {
+      alert('Signup successful!');
+      console.log(result);
+      setIsLogin(true); // Switch to login form
+    } else {
+      alert(result.message || 'Signup failed!');
+    }
+  } catch (error) {
+    console.error('Signup error:', error);
+    alert('An error occurred during signup.');
+  }
+};
 
+return (
+  <>
+    <Header />
+    <div className="auth-container">
+      <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
+
+        {/* Login Form */}
+        <div className="form login-form">
+          <h2>Login</h2>
+          <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
+          <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
+          <button className="auth-btn" onClick={handleLoginSubmit}>Login</button>
+          <p className="toggle-text">
+            Don't have an account?{' '}
+            <span onClick={toggleForm}>Sign Up</span>
+          </p>
         </div>
+
+        {/* Signup Form */}
+        <div className="form signup-form">
+          <h2>Sign Up</h2>
+          <input type="text" name="name" placeholder="Full Name" value={signupData.name} onChange={handleSignupChange} />
+          <input type="email" name="email" placeholder="Email" value={signupData.email} onChange={handleSignupChange} />
+          <input type="password" name="password" placeholder="Password" value={signupData.password} onChange={handleSignupChange} />
+          <input type="number" name="number" placeholder="Contact number" value={signupData.number} onChange={handleSignupChange} />
+          <button className="auth-btn" onClick={handleSignupSubmit}>Sign Up</button>
+          <p className="toggle-text">
+            Already have an account?{' '}
+            <span onClick={toggleForm}>Login</span>
+          </p>
+        </div>
+
       </div>
-    </>
-  );
+    </div>
+  </>
+);
 };
 
 export default Auth;

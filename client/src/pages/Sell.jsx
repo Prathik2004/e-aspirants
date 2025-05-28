@@ -38,7 +38,7 @@ const BookListingForm = () => {
     form.append('sellerAddress', formData.sellerAddress);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/sell-book`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/sell-book`, {
         method: 'POST',
         body: form
       });

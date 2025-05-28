@@ -14,25 +14,6 @@
   justify-content: center; /* center cards */
 }
 
-.floating-shape {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 320px;
-  height: 320px;
-  background: linear-gradient(135deg, #ff6f91, #845ec2);
-  border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%;
-  filter: drop-shadow(0 0 15px #ff6f91aa);
-  transform-style: preserve-3d;
-  animation: floatRotate 8s ease-in-out infinite;
-  z-index: 0;
-  opacity: 0.3;
-  pointer-events: none;
-  transform-origin: center center;
-  translate: -50% -50%;
-  will-change: transform;
-  mix-blend-mode: screen; /* Adds a modern blending effect */
-}
 
 .book-card {
   width: 220px;  /* fixed width */
