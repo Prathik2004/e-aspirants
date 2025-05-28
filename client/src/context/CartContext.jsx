@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
       // (You can extend API to fetch cart separately)
       // setCart(user.cart || []);
       // Let's fetch fresh from /user route that returns user + cart
-      const res = await axios.get('http://localhost:5000/user', {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCart(res.data.cart || []);
@@ -48,7 +48,7 @@ export const CartProvider = ({ children }) => {
     if (!user) return; // no user logged in
 
     try {
-      await axios.put('http://localhost:5000/cart', 
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/cart`, 
         { cart: newCart }, 
         { headers: { Authorization: `Bearer ${user.token}` } }
       );

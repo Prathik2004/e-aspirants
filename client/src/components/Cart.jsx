@@ -71,7 +71,7 @@ const Cart = () => {
                   <li className="cart-item" key={item._id}>
                     <div className="cart-item-info">
                       <img
-                        src={`http://localhost:5000/${item.productPhoto}`}
+                        src={`${process.env.REACT_APP_BACKEND_URL}${item.productPhoto}`}
                         alt={item.productName}
                         className="cart-item-img"
                         onError={(e) => {
