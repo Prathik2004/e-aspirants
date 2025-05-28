@@ -24,14 +24,6 @@ export const CartProvider = ({ children }) => {
   // Fetch cart from backend for logged in user
   const fetchCart = async (token) => {
     try {
-      // You may want to create an endpoint to fetch user cart, 
-      // but here we'll assume user object has the cart.
-      // So we just set cart from user.cart if available
-      // Or fetch from backend if needed
-      // For now, just set cart from user data
-      // (You can extend API to fetch cart separately)
-      // setCart(user.cart || []);
-      // Let's fetch fresh from /user route that returns user + cart
       const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -53,7 +45,7 @@ export const CartProvider = ({ children }) => {
         { headers: { Authorization: `Bearer ${user.token}` } }
       );
 
-      // Update cart locally and in localStorage
+      // Update user locally and in localStorage
       const updatedUser = { ...user, cart: newCart };
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
@@ -66,15 +58,15 @@ export const CartProvider = ({ children }) => {
   const addToCart = (item) => {
     const exists = cart.find(book => book._id === item._id);
     if (exists) {
-      // If item already in cart, do nothing or increase qty (if you want)
+      // If item already in cart, you might want to increase quantity here if you want
       return;
     }
     const newItem = {
-    ...item,
-    quantity: 1,
-    image: item.image
+      ...item,
+      quantity: 1,
+      image: item.image
     };
-    updateCart([...cart, item]);
+    updateCart([...cart, newItem]);  // <-- Use newItem here!
   };
 
   // Remove item from cart
@@ -95,19 +87,9 @@ export const CartProvider = ({ children }) => {
     setCart(userData.cart || []);
   };
 
-  const value = {
-    cart,
-    addToCart,
-    removeFromCart,
-    clearCart,
-    user,
-    setUserAndCart,
-  };
-
   return (
-  <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateCart, user, setUserAndCart }}>
-    {children}
-  </CartContext.Provider>
-);
-
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, user, setUserAndCart, updateCart }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
