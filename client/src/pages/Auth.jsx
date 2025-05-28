@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './Auth.css';
 import Header from '../components/Header';
-require('dotenv').config();
 
 const Auth = () => {
   const { setUserAndCart } = useCart();
