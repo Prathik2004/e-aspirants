@@ -6,10 +6,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const mongoose = require('mongoose');
-const { GridFSBucket, ObjectId } = require('mongodb');
-const { Readable } = require('stream');
-
 const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
 const authMiddleware = require('./middleware/authMiddleware');
@@ -23,13 +19,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 // Connect to MongoDB
 connectDB();
 
-let gfsBucket;
-mongoose.connection.once('open', () => {
-  const db = mongoose.connection.db;
-  gfsBucket = new GridFSBucket(db, { bucketName: 'uploads' });
-  console.log('✅ GridFSBucket initialized');
-});
-
 // Middleware
 app.use(cors({
   origin: 'https://e-aspirants.vercel.app', // ✅ replace with actual Vercel URL
@@ -37,10 +26,21 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Multer memory storage for GridFS upload
-const storage = multer.memoryStorage();
+// Serve uploaded images statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Multer storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads'); // Upload folder (make sure it exists)
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
 const upload = multer({ storage });
 
+// Signup route
 // Signup route
 app.post('/api/signup', async (req, res) => {
   const { name, email, password, number } = req.body;
@@ -50,6 +50,7 @@ app.post('/api/signup', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Don't redeclare the model as a new const
     const newUser = await User.create({
       name,
       email,
@@ -63,6 +64,7 @@ app.post('/api/signup', async (req, res) => {
     res.status(500).json({ message: 'Signup error', error: err.message });
   }
 });
+
 
 // Login route
 app.post('/api/login', async (req, res) => {
@@ -91,42 +93,28 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Sell book route with multer middleware to upload productPhoto to GridFS
+// Sell book route with multer middleware to upload productPhoto
 app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
   try {
     const bookData = req.body;
-
     if (req.file) {
-      const readableStream = new Readable();
-      readableStream.push(req.file.buffer);
-      readableStream.push(null);
-
-      const uploadStream = gfsBucket.openUploadStream(req.file.originalname);
-
-      uploadStream.on('error', (error) => {
-        console.error('GridFS upload error:', error);
-        return res.status(500).json({ error: 'Failed to upload image' });
-      });
-
-      uploadStream.on('finish', async () => {
-        bookData.productPhoto = uploadStream.id.toString();
-
-        const newBook = new Booklisting(bookData);
-        await newBook.save();
-        res.status(201).json({ message: 'Book listed successfully!' });
-      });
-
-      readableStream.pipe(uploadStream);
+      // Normalize the path to use forward slashes and prefix with /uploads/
+      const normalizedPath = req.file.path.replace(/\\/g, '/'); // replaces backslashes with slashes
+      bookData.productPhoto = '/' + normalizedPath; // e.g. "/uploads/1685042983245-filename.jpg"
     } else {
       return res.status(400).json({ error: 'Product photo is required' });
     }
+
+    const newBook = new Booklisting(bookData);
+    await newBook.save();
+    res.status(201).json({ message: 'Book listed successfully!' });
   } catch (error) {
     console.error('Error saving book:', error);
     res.status(500).json({ error: 'Failed to list book' });
   }
 });
 
-// Get all books route
+
 app.get('/api/books', async (req, res) => {
   try {
     const books = await Booklisting.find(); // fetch all books
@@ -136,34 +124,7 @@ app.get('/api/books', async (req, res) => {
   }
 });
 
-// Serve image from GridFS
-app.get('/uploads/:id', (req, res) => {
-    try {
-        const fileId = new ObjectId(req.params.id);
 
-        gfsBucket.find({ _id: fileId }).toArray((err, files) => {
-            if (err || !files || files.length === 0) {
-                console.error('GridFS file not found or error:', err);
-                return res.status(404).json({ error: 'File not found' });
-            }
-
-            const file = files[0];
-            res.set('Content-Type', file.contentType || 'application/octet-stream');
-
-            const downloadStream = gfsBucket.openDownloadStream(fileId);
-
-            downloadStream.on('error', (streamErr) => {
-                console.error('GridFS download stream error:', streamErr);
-                res.status(404).json({ error: 'File not found during download' });
-            });
-
-            downloadStream.pipe(res);
-        });
-    } catch (err) {
-        console.error('Error in /uploads/:id route:', err);
-        res.status(400).json({ error: 'Invalid file id' });
-    }
-});
 
 // Get user profile route
 app.get('/user', authMiddleware, async (req, res) => {
