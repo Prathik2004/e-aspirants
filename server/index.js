@@ -20,11 +20,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 connectDB();
 
 // Middleware
-app.use(cors(
-  {
-    origin:"https://e-aspirants.vercel.app/"
-  }
-));
+app.use(cors({
+  origin: 'https://e-aspirants.vercel.app/', // ✅ replace with actual Vercel URL
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve uploaded images statically
