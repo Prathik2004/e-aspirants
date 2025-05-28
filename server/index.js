@@ -138,28 +138,31 @@ app.get('/api/books', async (req, res) => {
 
 // Serve image from GridFS
 app.get('/uploads/:id', (req, res) => {
-  try {
-    const fileId = new ObjectId(req.params.id);
+    try {
+        const fileId = new ObjectId(req.params.id);
 
-    gfsBucket.find({ _id: fileId }).toArray((err, files) => {
-      if (!files || files.length === 0) {
-        return res.status(404).json({ error: 'File not found' });
-      }
+        gfsBucket.find({ _id: fileId }).toArray((err, files) => {
+            if (err || !files || files.length === 0) {
+                console.error('GridFS file not found or error:', err);
+                return res.status(404).json({ error: 'File not found' });
+            }
 
-      const file = files[0];
-      res.set('Content-Type', file.contentType || 'application/octet-stream');
+            const file = files[0];
+            res.set('Content-Type', file.contentType || 'application/octet-stream');
 
-      const downloadStream = gfsBucket.openDownloadStream(fileId);
+            const downloadStream = gfsBucket.openDownloadStream(fileId);
 
-      downloadStream.on('error', () => {
-        res.status(404).json({ error: 'File not found' });
-      });
+            downloadStream.on('error', (streamErr) => {
+                console.error('GridFS download stream error:', streamErr);
+                res.status(404).json({ error: 'File not found during download' });
+            });
 
-      downloadStream.pipe(res);
-    });
-  } catch (err) {
-    res.status(400).json({ error: 'Invalid file id' });
-  }
+            downloadStream.pipe(res);
+        });
+    } catch (err) {
+        console.error('Error in /uploads/:id route:', err);
+        res.status(400).json({ error: 'Invalid file id' });
+    }
 });
 
 // Get user profile route
