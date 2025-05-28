@@ -98,7 +98,9 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
   try {
     const bookData = req.body;
     if (req.file) {
-      bookData.productPhoto = req.file.path; // Store path to uploaded file
+      // Normalize the path to use forward slashes and prefix with /uploads/
+      const normalizedPath = req.file.path.replace(/\\/g, '/'); // replaces backslashes with slashes
+      bookData.productPhoto = '/' + normalizedPath; // e.g. "/uploads/1685042983245-filename.jpg"
     } else {
       return res.status(400).json({ error: 'Product photo is required' });
     }
@@ -111,6 +113,7 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
     res.status(500).json({ error: 'Failed to list book' });
   }
 });
+
 
 app.get('/api/books', async (req, res) => {
   try {
