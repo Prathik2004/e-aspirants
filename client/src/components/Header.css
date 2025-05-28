@@ -84,6 +84,19 @@
 .header-dropdown li:hover {
   background-color: #ff6837;
 }
+.header-hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.header-hamburger .bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+}
 
 @media screen and (max-width: 1024px) {
   .header-container {
@@ -122,38 +135,25 @@
 }
 
 @media screen and (max-width: 600px) {
-  .header-container {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "logo"
-      "cart"
-      "navbar"
-      "login";
-  }
+  .header-hamburger {
+  display: flex;
+}
 
-  .header-logo {
-    text-align: center;
-  }
+.header-navbar {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 
-  .header-navbar-list {
-    flex-direction: column;
-    gap: 10px;
-    font-size: 18px;
-  }
+.header-navbar.open {
+  display: flex;
+  background-color: rgb(36, 36, 36);
+}
 
-  .header-login-button,
-  .header-signup-button {
-    width: 80%;
-    padding: 8px 16px;
-  }
+.header-navbar-list {
+  flex-direction: column;
+  gap: 10px;
+}
 
-  .header-cart {
-    justify-self: center;
-    margin: 0;
-  }
-
-  .header-dropdown {
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }

@@ -6,6 +6,8 @@ import { NavLink, useNavigate } from 'react-router-dom'
 const Header = () => {
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -42,26 +44,33 @@ const Header = () => {
           <img src={Logo} alt="Logo" className="header-logo-img" width={400} height={100} />
         </div>
 
-        <div className="header-navbar">
+        <div className="header-hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <div className="bar"></div>
+          <div className="bar"></div>
+          <div className="bar"></div>
+        </div>
+
+        <div className={`header-navbar ${mobileMenuOpen ? 'open' : ''}`}>
           <ul className="header-navbar-list">
-            <NavLink to='/' className="header-navbar-item" style={{ textDecoration: 'none', color: 'white' }}>Home</NavLink>
-            <NavLink to='/buy' className="header-navbar-item" style={{ textDecoration: 'none', color: 'white' }}>Buy</NavLink>
-            <NavLink to='/sell' className="header-navbar-item" style={{ textDecoration: 'none', color: 'white' }}>Sell/Donate</NavLink>
-            <NavLink to='/contact' className="header-navbar-item" style={{ textDecoration: 'none', color: 'white' }}>Contact</NavLink>
+            <NavLink to='/' className="header-navbar-item" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'white' }}>Home</NavLink>
+            <NavLink to='/buy' className="header-navbar-item" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'white' }}>Buy</NavLink>
+            <NavLink to='/sell' className="header-navbar-item" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'white' }}>Sell/Donate</NavLink>
+            <NavLink to='/contact' className="header-navbar-item" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'white' }}>Contact</NavLink>
           </ul>
         </div>
 
+
         <div className="header-cart">
           <NavLink to='/cart' style={{ textDecoration: 'none', color: 'white' }}>
-          <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Cart" className="header-cart-icon" width={30} height={30} />
+            <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Cart" className="header-cart-icon" width={30} height={30} />
           </NavLink>
         </div>
 
         <div className="header-login" ref={dropdownRef} style={{ position: 'relative' }}>
           {user ? (
             <>
-              <span 
-                style={{ color: 'white', marginRight: '10px', cursor: 'pointer' }} 
+              <span
+                style={{ color: 'white', marginRight: '10px', cursor: 'pointer' }}
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 Hello, {user.name} &#x25BC;
