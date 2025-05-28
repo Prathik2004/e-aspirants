@@ -21,7 +21,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: 'https://e-aspirants.vercel.app/', // ✅ replace with actual Vercel URL
+  origin: 'https://e-aspirants.vercel.app', // ✅ replace with actual Vercel URL
   credentials: true
 }));
 app.use(express.json());
