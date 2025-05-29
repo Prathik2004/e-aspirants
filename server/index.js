@@ -67,6 +67,38 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
   }
 });
 
+// Signup route
+app.post('/api/signup', async (req, res) => {
+  const { name, email, password, number } = req.body;
+
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Email already registered' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      number,
+      cart: [], // Initialize empty cart
+    });
+
+    // Save to DB
+    await newUser.save();
+
+    res.status(201).json({ message: 'Signup successful', user: { name, email } });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ message: 'Failed to register user' });
+  }
+});
 
 
 // Login route
