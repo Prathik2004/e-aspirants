@@ -50,6 +50,10 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
       return res.status(400).json({ error: 'Product photo is required' });
     }
 
+    // Normalize path and set to bookData
+    const normalizedPath = '/' + req.file.path.replace(/\\/g, '/'); // Ensures Unix-style and starts with '/'
+    bookData.productPhoto = normalizedPath;
+
     const newBook = new Booklisting(bookData);
     await newBook.save();
 
@@ -59,6 +63,7 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
     res.status(500).json({ error: 'Failed to list book' });
   }
 });
+
 
 
 // Login route
