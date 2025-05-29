@@ -51,7 +51,7 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
     }
 
     // Normalize path and set to bookData
-    const normalizedPath = '/' + req.file.path.replace(/\\/g, '/'); // Ensures Unix-style and starts with '/'
+    const normalizedPath = '/uploads/' + req.file.filename; // use forward slashes for web
     bookData.productPhoto = normalizedPath;
 
     const newBook = new Booklisting(bookData);
