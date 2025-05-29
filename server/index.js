@@ -51,7 +51,8 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
     }
 
     // Normalize path and set to bookData
-    const normalizedPath = 'uploads' + req.file.filename;
+    const normalizedPath = 'uploads\\' + req.file.filename;
+
     bookData.productPhoto = normalizedPath;
 
     const newBook = new Booklisting(bookData);
