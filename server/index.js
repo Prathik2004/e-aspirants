@@ -5,6 +5,8 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
 const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
@@ -146,6 +148,35 @@ app.put('/cart', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Failed to update cart' });
   }
 });
+
+app.post('/api/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+
+  // OPTIONAL: Use nodemailer to send an email
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'prathik1611@gmail.com',
+      pass: 'ifys gvty skru dhnb'
+    }
+  });
+
+  const mailOptions = {
+    from: email,
+    to: 'prathik1611@gmail.com',
+    subject: `Message from ${name}`,
+    text: message
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Email error:', error);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
