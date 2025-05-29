@@ -50,10 +50,6 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
       return res.status(400).json({ error: 'Product photo is required' });
     }
 
-    // Normalize the path and save it to bookData
-    const normalizedPath = req.file.path.replace(/\\/g, '/');
-    bookData.productPhoto = '/' + normalizedPath; // example: /uploads/171234123-book.jpg
-
     const newBook = new Booklisting(bookData);
     await newBook.save();
 
