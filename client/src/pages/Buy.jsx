@@ -118,7 +118,7 @@ const Buy = () => {
                 <img
                   src={`${import.meta.env.VITE_BACKEND_URL}/${book.productPhoto}`}
                   alt={book.productName}
-                  style={{ width: '200px', height: '300px', objectFit: 'cover' }}
+                  style={{ width: '200px', height: '350px', objectFit: 'cover' }}
                 />
                 <h3>{book.productName || 'Untitled'}</h3>
                 <p>{book.productDescription || 'No description available.'}</p>
