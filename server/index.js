@@ -12,6 +12,8 @@ const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
 const authMiddleware = require('./middleware/authMiddleware');
 const Booklisting = require('./models/Booklisting');
+const Order = require('./models/Order');
+
 
 require('dotenv').config();
 
@@ -158,6 +160,41 @@ app.get('/api/books', async (req, res) => {
   }
 });
 
+app.post('/api/place-order', authMiddleware, async (req, res) => {
+  try {
+    const { address, paymentMethod, cart } = req.body;
+
+    if (!cart || cart.length === 0) {
+      return res.status(400).json({ message: 'Cart is empty' });
+    }
+
+    const items = cart.map((item) => ({
+      productId: item._id,
+      productName: item.productName,
+      productCost: item.productCost,
+      quantity: item.quantity || 1,
+    }));
+
+    const totalAmount = items.reduce(
+      (sum, item) => sum + item.productCost * item.quantity,
+      0
+    );
+
+    const newOrder = new Order({
+      user: req.user.id,
+      items,
+      address,
+      paymentMethod,
+      totalAmount,
+    });
+
+    await newOrder.save();
+    res.status(201).json({ message: 'Order placed successfully', order: newOrder });
+  } catch (error) {
+    console.error('Order error:', error);
+    res.status(500).json({ message: 'Failed to place order' });
+  }
+});
 
 
 // Get user profile route
