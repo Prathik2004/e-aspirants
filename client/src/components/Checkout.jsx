@@ -38,6 +38,9 @@ const Checkout = () => {
           cart,
         },
         {
+          withCredentials: true, // ✅ this sends the cookie with the request
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
