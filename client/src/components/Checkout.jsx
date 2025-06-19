@@ -28,7 +28,6 @@ const Checkout = () => {
 
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/place-order`,
@@ -38,7 +37,7 @@ const Checkout = () => {
           cart,
         },
         {
-          withCredentials: true, // ✅ this sends the cookie with the request
+          withCredentials: true, // ✅ Sends cookie with request
         }
       );
 
@@ -46,13 +45,15 @@ const Checkout = () => {
       setName('');
       setAddress('');
       setPaymentMethod('card');
-
-      // Optional: Clear cart after order
-      updateCart([]);
+      updateCart([]); // Clear cart after order
 
     } catch (error) {
-      console.error(error);
-      toast.error('Failed to place order');
+      console.error('Place order error:', error);
+      if (error.response?.status === 401) {
+        toast.error('Unauthorized. Please log in again.');
+      } else {
+        toast.error('Failed to place order');
+      }
     } finally {
       setLoading(false);
     }
