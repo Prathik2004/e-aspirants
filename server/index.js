@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const cookieParser = require('cookie-parser');
 
 const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
@@ -32,6 +33,7 @@ app.use(express.json());
 
 // Serve uploaded images statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(cookieParser());
 
 // Multer storage configuration
 const storage = multer.diskStorage({
