@@ -37,7 +37,7 @@ const Checkout = () => {
           cart,
         },
         {
-          withCredentials: true, // ✅ Sends cookie with request
+          withCredentials: true, // ✅ sends cookie-based token
         }
       );
 
@@ -45,19 +45,15 @@ const Checkout = () => {
       setName('');
       setAddress('');
       setPaymentMethod('card');
-      updateCart([]); // Clear cart after order
-
+      updateCart([]); // ✅ Clear cart
     } catch (error) {
-      console.error('Place order error:', error);
-      if (error.response?.status === 401) {
-        toast.error('Unauthorized. Please log in again.');
-      } else {
-        toast.error('Failed to place order');
-      }
+      console.error(error);
+      toast.error('Failed to place order');
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <>
