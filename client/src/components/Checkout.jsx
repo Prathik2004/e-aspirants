@@ -31,6 +31,16 @@ const Checkout = () => {
     try {
       setLoading(true);
 
+      if (paymentMethod === 'card') {
+        const response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/create-checkout-session`,
+          { cart },
+          { withCredentials: true }
+        );
+        window.location.href = response.data.url;
+        return;
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/place-order`,
         {
@@ -117,7 +127,7 @@ const Checkout = () => {
                 </select>
               </label>
 
-              <button type="submit" className="place-order-btn" disabled={loading}>
+              <button type="submit" className={`place-order-btn ${loading ? 'loading' : ''}`} disabled={loading}>
                 {loading ? 'Placing Order...' : 'Place Order'}
               </button>
             </form>
