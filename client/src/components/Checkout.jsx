@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Header from './Header';
-import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Checkout = () => {
   const navigate = useNavigate();
-
   const { cart, updateCart } = useCart();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -40,7 +39,7 @@ const Checkout = () => {
           cart,
         },
         {
-          withCredentials: true, // ✅ sends cookie-based token
+          withCredentials: true,
         }
       );
 
@@ -48,8 +47,12 @@ const Checkout = () => {
       setName('');
       setAddress('');
       setPaymentMethod('card');
-      navigate('/'); // Redirect to home page
-      updateCart([]); // ✅ Clear cart
+      updateCart([]);
+
+      setTimeout(() => {
+        navigate('/');
+      }, 2500);
+
     } catch (error) {
       console.error(error);
       toast.error('Failed to place order');
@@ -57,7 +60,6 @@ const Checkout = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <>
