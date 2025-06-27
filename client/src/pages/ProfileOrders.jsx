@@ -49,7 +49,7 @@ const ProfileOrders = () => {
                       alt={item.productName}
                       className="item-photo"
                       onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/100x150?text=No+Image';
+                        e.target.src = '/no-image.png';
                       }}
                     />
                     <div>
