@@ -45,9 +45,12 @@ const ProfileOrders = () => {
                 {order.items.map((item) => (
                   <li key={item.productId} className="order-item">
                     <img
-                      src={`${import.meta.env.VITE_BACKEND_URL}/${item.productPhoto}`}
+                      src={`${import.meta.env.VITE_BACKEND_URL}/${item.productPhoto.replace(/\\/g, '/')}`}
                       alt={item.productName}
                       className="item-photo"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/100x150?text=No+Image';
+                      }}
                     />
                     <div>
                       <p className="item-name">{item.productName}</p>
