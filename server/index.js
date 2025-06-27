@@ -194,7 +194,9 @@ app.post('/api/place-order', authMiddleware, async (req, res) => {
       productName: item.productName,
       productCost: item.productCost,
       quantity: item.quantity || 1,
+      productPhoto: item.productPhoto, // 👈 ADD THIS LINE
     }));
+
 
     const totalAmount = items.reduce(
       (sum, item) => sum + item.productCost * item.quantity,
