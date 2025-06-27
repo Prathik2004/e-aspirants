@@ -24,23 +24,39 @@ const ProfileOrders = () => {
     <>
       <Header />
       <div className="order-history-container">
-        <h2>Your Order History</h2>
+        <h2 className="order-history-title">Your Order History</h2>
         {loading ? (
-          <p>Loading...</p>
+          <p className="loading-text">Loading...</p>
         ) : orders.length === 0 ? (
-          <p>No past orders found.</p>
+          <p className="empty-text">No past orders found.</p>
         ) : (
           orders.map((order) => (
-            <div className="order-card" key={order._id}>
-              <h3>Order ID: {order._id}</h3>
-              <p>Date: {new Date(order.orderedAt).toLocaleString()}</p>
-              <p>Total: ₹{order.totalAmount}</p>
-              <p>Payment: {order.paymentMethod}</p>
-              <p>Address: {order.address}</p>
-              <ul>
+            <div className="order-card-modern" key={order._id}>
+              <div className="order-header">
+                <div>
+                  <h3>Order ID: <span>{order._id}</span></h3>
+                  <p><strong>Date:</strong> {new Date(order.orderedAt).toLocaleString()}</p>
+                  <p><strong>Total:</strong> ₹{order.totalAmount}</p>
+                  <p><strong>Payment:</strong> {order.paymentMethod}</p>
+                  <p><strong>Address:</strong> {order.address}</p>
+                </div>
+              </div>
+              <ul className="order-items">
                 {order.items.map((item) => (
-                  <li key={item.productId}>
-                    {item.productName} × {item.quantity} = ₹{item.productCost * item.quantity}
+                  <li key={item.productId} className="order-item">
+                    <img
+                      src={`${import.meta.env.VITE_BACKEND_URL}/${item.productPhoto}`}
+                      alt={item.productName}
+                      className="item-photo"
+                    />
+                    <div>
+                      <p className="item-name">{item.productName}</p>
+                      <p className="item-details">
+                        Quantity: {item.quantity} <br />
+                        Price: ₹{item.productCost} <br />
+                        Total: ₹{item.productCost * item.quantity}
+                      </p>
+                    </div>
                   </li>
                 ))}
               </ul>

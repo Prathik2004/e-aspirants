@@ -1,14 +1,59 @@
 .order-history-container {
-  max-width: 700px;
+  max-width: 900px;
   margin: 2rem auto;
-  padding: 1rem;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-.order-card {
-  color: black;
-  background: #f9fafb;
-  padding: 1rem;
-  border-radius: 0.75rem;
+.order-history-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.order-card-modern {
+  background: #f0f4f8;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #d9e2ec;
+}
+
+.order-header span {
+  color: #0077cc;
+  font-weight: bold;
+}
+
+.order-items {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
   margin-bottom: 1rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.item-photo {
+  width: 70px;
+  height: 90px;
+  object-fit: cover;
+  margin-right: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+.item-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.item-details {
+  font-size: 0.9rem;
+  color: #555;
 }
