@@ -15,6 +15,7 @@
 }
 
 .order-card-modern {
+  color: black;
   background: #f0f4f8;
   border-radius: 1rem;
   padding: 1.5rem;
@@ -28,12 +29,14 @@
 }
 
 .order-items {
+  color: black;
   list-style: none;
   padding: 0;
   margin-top: 1rem;
 }
 
 .order-item {
+  color: black;
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
@@ -49,11 +52,13 @@
 }
 
 .item-name {
+  color: black;
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
 
 .item-details {
+  color: black;
   font-size: 0.9rem;
   color: #555;
 }
