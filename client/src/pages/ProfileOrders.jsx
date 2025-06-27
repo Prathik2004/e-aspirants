@@ -20,6 +20,11 @@ const ProfileOrders = () => {
     });
   }, []);
 
+  const getImageUrl = (photoPath) => {
+    if (!photoPath) return '/assets/no-image.png';
+    return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.replace(/\\/g, '/')}`;
+  };
+
   return (
     <>
       <Header />
@@ -45,11 +50,11 @@ const ProfileOrders = () => {
                 {order.items.map((item) => (
                   <li key={item.productId} className="order-item">
                     <img
-                      src={`${import.meta.env.VITE_BACKEND_URL}/${(item.productPhoto || '').replace(/\\/g, '/')}`}
+                      src={getImageUrl(item.productPhoto)}
                       alt={item.productName}
                       className="item-photo"
                       onError={(e) => {
-                        e.target.src = '/no-image.png';
+                        e.target.src = '/assets/no-image.png';
                       }}
                     />
                     <div>
