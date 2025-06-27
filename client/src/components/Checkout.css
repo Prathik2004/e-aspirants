@@ -49,6 +49,7 @@ h2 {
   font-size: 1rem;
   font-family: inherit;
   background-color: #f9fafb;
+  color: black;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
