@@ -26,8 +26,8 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: 'https://e-aspirants.vercel.app', // ✅ replace with actual Vercel URL
-  credentials: true
+  origin: ['https://e-aspirants.vercel.app', 'http://localhost:5173'],
+  credentials: true,
 }));
 app.use(express.json());
 
@@ -64,6 +64,25 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
     const newBook = new Booklisting(bookData);
     await newBook.save();
 
+    res.status(201).json({ message: 'Book listed successfully!' });
+  } catch (error) {
+    console.error('Error saving book:', error);
+    res.status(500).json({ error: 'Failed to list book' });
+  }
+});
+
+app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
+  try {
+    const bookData = req.body;
+    if (req.file) {
+      // Normalize the path to use forward slashes and prefix with /uploads/
+      const normalizedPath = req.file.path.replace(/\\/g, '/'); // replaces backslashes with slashes
+    } else {
+      return res.status(400).json({ error: 'Product photo is required' });
+    }
+
+    const newBook = new Booklisting(bookData);
+    await newBook.save();
     res.status(201).json({ message: 'Book listed successfully!' });
   } catch (error) {
     console.error('Error saving book:', error);
@@ -141,24 +160,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Sell book route with multer middleware to upload productPhoto
-app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
-  try {
-    const bookData = req.body;
-    if (req.file) {
-      // Normalize the path to use forward slashes and prefix with /uploads/
-      const normalizedPath = req.file.path.replace(/\\/g, '/'); // replaces backslashes with slashes
-    } else {
-      return res.status(400).json({ error: 'Product photo is required' });
-    }
 
-    const newBook = new Booklisting(bookData);
-    await newBook.save();
-    res.status(201).json({ message: 'Book listed successfully!' });
-  } catch (error) {
-    console.error('Error saving book:', error);
-    res.status(500).json({ error: 'Failed to list book' });
-  }
-});
 
 
 app.get('/api/books', async (req, res) => {
