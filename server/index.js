@@ -25,9 +25,20 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 connectDB();
 
 // Middleware
+const allowedOrigins = [
+  'https://e-aspirants.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://e-aspirants.vercel.app', // ✅ replace with actual Vercel URL
-  credentials: true
+  origin: ['https://e-aspirants.vercel.app', 'http://localhost:5173'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 app.use(express.json());
 
