@@ -45,7 +45,7 @@ const ProfileOrders = () => {
                 {order.items.map((item) => (
                   <li key={item.productId} className="order-item">
                     <img
-                      src={`${import.meta.env.VITE_BACKEND_URL}/${item.productPhoto.replace(/\\/g, '/')}`}
+                      src={`${import.meta.env.VITE_BACKEND_URL}/${(item.productPhoto || '').replace(/\\/g, '/')}`}
                       alt={item.productName}
                       className="item-photo"
                       onError={(e) => {
