@@ -66,10 +66,10 @@ const Checkout = () => {
       <Header />
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="checkout-container">
-        <h2>Checkout</h2>
+        <h2 className="checkout-title">Checkout</h2>
 
         {cart.length === 0 ? (
-          <p>Your cart is empty.</p>
+          <p className="empty-cart">Your cart is empty.</p>
         ) : (
           <>
             <div className="order-summary">
