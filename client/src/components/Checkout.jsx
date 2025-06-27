@@ -1,6 +1,7 @@
-import React, { useState, useNavigate } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import Header from './Header';
+import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
