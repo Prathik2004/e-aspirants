@@ -51,29 +51,6 @@ const upload = multer({ storage });
 app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
   try {
     const bookData = req.body;
-
-    if (!req.file) {
-      return res.status(400).json({ error: 'Product photo is required' });
-    }
-
-    // Normalize path and set to bookData
-    const normalizedPath = 'uploads\\' + req.file.filename;
-
-    bookData.productPhoto = normalizedPath;
-
-    const newBook = new Booklisting(bookData);
-    await newBook.save();
-
-    res.status(201).json({ message: 'Book listed successfully!' });
-  } catch (error) {
-    console.error('Error saving book:', error);
-    res.status(500).json({ error: 'Failed to list book' });
-  }
-});
-
-app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
-  try {
-    const bookData = req.body;
     if (req.file) {
       // Normalize the path to use forward slashes and prefix with /uploads/
       const normalizedPath = req.file.path.replace(/\\/g, '/'); // replaces backslashes with slashes
