@@ -267,6 +267,18 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+// Get orders for the logged-in user
+app.get('/api/my-orders', authMiddleware, async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user.id }).sort({ orderedAt: -1 });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Fetch orders error:', error);
+    res.status(500).json({ message: 'Failed to fetch orders' });
+  }
+});
+
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
