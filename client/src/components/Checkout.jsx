@@ -31,16 +31,6 @@ const Checkout = () => {
     try {
       setLoading(true);
 
-      if (paymentMethod === 'card') {
-        const response = await axios.post(
-          `${import.meta.env.VITE_BACKEND_URL}/api/create-checkout-session`,
-          { cart },
-          { withCredentials: true }
-        );
-        window.location.href = response.data.url;
-        return;
-      }
-
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/place-order`,
         {
