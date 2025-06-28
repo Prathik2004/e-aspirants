@@ -21,7 +21,7 @@ const ProfileOrders = () => {
   }, []);
 
   const getImageUrl = (photoPath) => {
-    if (!photoPath) return '/assets/no-image.png';
+    if (!photoPath) return `${import.meta.env.VITE_BACKEND_URL}/assets/no-image.png`;
     return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.replace(/\\/g, '/')}`;
   };
 
@@ -54,7 +54,10 @@ const ProfileOrders = () => {
                       alt={item.productName}
                       className="item-photo"
                       onError={(e) => {
-                        e.target.src = '/assets/no-image.png';
+                        if (!e.target.dataset.fallback) {
+                          e.target.src = `${import.meta.env.VITE_BACKEND_URL}/assets/no-image.png`;
+                          e.target.dataset.fallback = 'true';
+                        }
                       }}
                     />
                     <div>
