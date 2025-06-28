@@ -21,8 +21,8 @@ const ProfileOrders = () => {
   }, []);
 
   const getImageUrl = (photoPath) => {
-    if (!photoPath) return `${import.meta.env.VITE_BACKEND_URL}/assets/no-image.png`;
-    return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.split('\\').join('/')}`;
+    if (!photoPath) return 'https://via.placeholder.com/100x150?text=No+Image';
+    return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.replace(/\\/g, '/')}`;
   };
 
   return (
@@ -55,7 +55,7 @@ const ProfileOrders = () => {
                       className="item-photo"
                       onError={(e) => {
                         if (!e.target.dataset.fallback) {
-                          e.target.src = `${import.meta.env.VITE_BACKEND_URL}/assets/no-image.png`;
+                          e.target.src = 'https://via.placeholder.com/100x150?text=No+Image';
                           e.target.dataset.fallback = 'true';
                         }
                       }}
