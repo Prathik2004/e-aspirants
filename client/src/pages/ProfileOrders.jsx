@@ -22,7 +22,7 @@ const ProfileOrders = () => {
 
   const getImageUrl = (photoPath) => {
     if (!photoPath) return `${import.meta.env.VITE_BACKEND_URL}/assets/no-image.png`;
-    return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.replace(/\\/g, '/')}`;
+    return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.split('\\').join('/')}`;
   };
 
   return (
