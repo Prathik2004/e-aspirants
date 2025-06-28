@@ -21,7 +21,7 @@ const ProfileOrders = () => {
   }, []);
 
   const getImageUrl = (photoPath) => {
-    if (!photoPath) return 'https://via.placeholder.com/100x150?text=No+Image';
+    if (!photoPath) return 'https://placehold.co/600x400';
     return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.replace(/\\/g, '/')}`;
   };
 
