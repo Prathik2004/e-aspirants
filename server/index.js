@@ -26,8 +26,10 @@ connectDB();
 
 // Middleware
 const allowedOrigins = [
-  'https://e-aspirants.vercel.app'
+  'http://localhost:5173',               // your local front-end
+  'https://e-aspirants.vercel.app'       // your prod front-end
 ];
+
 
 app.use(cors({
   origin: ['https://e-aspirants.vercel.app', 'http://localhost:5173'],
