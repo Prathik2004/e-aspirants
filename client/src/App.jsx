@@ -10,7 +10,7 @@ import ProfileOrders from './pages/ProfileOrders'
 import Profile from './pages/Profile'
 import Cart from './components/Cart'
 import Checkout from './components/Checkout'
-import { SpeedInsights } from '@vercel/speed-insights/react';
+//import { SpeedInsights } from '@vercel/speed-insights/react';
 
 
 function App() {
@@ -29,7 +29,6 @@ function App() {
           <Route path='/checkout' element={<Checkout />} />
           </Routes>
       </BrowserRouter>
-      <SpeedInsights />
     </>
   )
 }

@@ -12,7 +12,6 @@ const Buy = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [categories, setCategories] = useState([]);
 
-
   const { addToCart, cart, user } = useCart();
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const Buy = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/books`);
         setBooks(response.data);
-        setFilteredBooks(response.data); // default view
+        setFilteredBooks(response.data);
         const uniqueCategories = [...new Set(response.data.map(book => book.productCategory))];
         setCategories(uniqueCategories);
       } catch (error) {
@@ -55,7 +54,6 @@ const Buy = () => {
     setFilteredBooks(filtered);
   }, [books, sortOption, costFilter, categoryFilter]);
 
-  // Handler for adding item to cart
   const handleAddToCart = (book) => {
     if (!user) {
       alert('Please login to add items to your cart.');
@@ -71,7 +69,6 @@ const Buy = () => {
         <div className="Buy-main">
 
           <div className="controls">
-            {/* Sorting and filters code remains unchanged */}
             <div className="sort-filter-container">
               <div className="filter-group">
                 <label htmlFor="sort">Sort By:</label>
@@ -107,18 +104,20 @@ const Buy = () => {
                   ))}
                 </select>
               </div>
-
             </div>
-
           </div>
 
           <div className="book-list">
             {filteredBooks.map(book => (
               <div className="book-card" key={book._id}>
                 <img
-                  src={`${import.meta.env.VITE_BACKEND_URL}/${book.productPhoto}`}
+                  src={book.productPhoto}
                   alt={book.productName}
                   style={{ width: '200px', height: '350px', objectFit: 'cover' }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/200x350?text=No+Image';
+                  }}
                 />
                 <h3>{book.productName || 'Untitled'}</h3>
                 <p>{book.productDescription || 'No description available.'}</p>

@@ -2,21 +2,18 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+
+require('dotenv').config();
+const { storage }    = require('./config/cloudinary');
 
 const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
 const authMiddleware = require('./middleware/authMiddleware');
 const Booklisting = require('./models/Booklisting');
 const Order = require('./models/Order');
-
-
-require('dotenv').config();
 
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
@@ -25,64 +22,55 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 connectDB();
 
 // Middleware
-const allowedOrigins = [
-  'http://localhost:5173',               // your local front-end
-  'https://e-aspirants.vercel.app'       // your prod front-end
-];
-
-
+const allowedOrigins = ['http://localhost:5173','https://e-aspirants.vercel.app'];
 app.use(cors({
-  origin: ['https://e-aspirants.vercel.app', 'http://localhost:5173'],
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+  origin(origin, cb) {
+    if (!origin || allowedOrigins.includes(origin)) return cb(null,true);
+    cb(new Error('Not allowed by CORS'), false);
   },
   credentials: true,
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
 }));
+
 app.use(express.json());
 
 // Serve uploaded images statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cookieParser());
 
-// Multer storage configuration
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads'); // Upload folder (make sure it exists)
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
 const upload = multer({ storage });
 
-// Signup route
-// Signup route
+
 app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
   try {
-    const bookData = req.body;
+      // 1) req.body contains all your text fields
+      const bookData = { ...req.body };
 
-    if (!req.file) {
-      return res.status(400).json({ error: 'Product photo is required' });
+      // 2) ensure we got a file
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({ error: 'Product photo is required' });
+      }
+
+      // 3) multer-storage-cloudinary gives you the hosted URL
+      //    and the public_id for future deletes
+      bookData.productPhoto = req.file.path;          // e.g. https://res...
+      bookData.photoPublicId = req.file.filename || req.file.public_id;    // e.g. book-covers/123abc
+
+      // 4) save to Mongo
+      const newBook = new Booklisting(bookData);
+      await newBook.save();
+
+      // 5) return the full document (incl. photo URL)
+      res.status(201).json(newBook);
+    } catch (error) {
+      console.error('Error saving book:', error);
+      res.status(500).json({ error: 'Failed to list book' });
     }
-
-    // Normalize path and set to bookData
-    const normalizedPath = 'uploads\\' + req.file.filename;
-
-    bookData.productPhoto = normalizedPath;
-
-    const newBook = new Booklisting(bookData);
-    await newBook.save();
-
-    res.status(201).json({ message: 'Book listed successfully!' });
-  } catch (error) {
-    console.error('Error saving book:', error);
-    res.status(500).json({ error: 'Failed to list book' });
   }
-});
+);
+
 
 // Signup route
 app.post('/api/signup', async (req, res) => {
@@ -150,26 +138,6 @@ app.post('/api/login', async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ message: 'Login error', error: err.message });
-  }
-});
-
-// Sell book route with multer middleware to upload productPhoto
-app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
-  try {
-    const bookData = req.body;
-    if (req.file) {
-      // Normalize the path to use forward slashes and prefix with /uploads/
-      const normalizedPath = req.file.path.replace(/\\/g, '/'); // replaces backslashes with slashes
-    } else {
-      return res.status(400).json({ error: 'Product photo is required' });
-    }
-
-    const newBook = new Booklisting(bookData);
-    await newBook.save();
-    res.status(201).json({ message: 'Book listed successfully!' });
-  } catch (error) {
-    console.error('Error saving book:', error);
-    res.status(500).json({ error: 'Failed to list book' });
   }
 });
 
@@ -274,7 +242,10 @@ app.post('/api/contact', async (req, res) => {
 // Get orders for the logged-in user
 app.get('/api/my-orders', authMiddleware, async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.user.id }).sort({ orderedAt: -1 });
+    const orders = await Order.find({ user: req.user.id })
+      .sort({ orderedAt: -1 })
+      .populate('items.productId', 'productName productPhoto productCost'); // 👈 Populating these fields
+
     res.status(200).json(orders);
   } catch (error) {
     console.error('Fetch orders error:', error);
@@ -282,6 +253,12 @@ app.get('/api/my-orders', authMiddleware, async (req, res) => {
   }
 });
 
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500)
+     .json({ error: err.message || 'Internal Server Error' });
+});
 
 
 // Start server

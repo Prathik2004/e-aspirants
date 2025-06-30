@@ -11,17 +11,21 @@ const ProfileOrders = () => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/my-orders`, {
       withCredentials: true
     })
-    .then((res) => {
-      setOrders(res.data);
-      setLoading(false);
-    })
-    .catch(() => {
-      setLoading(false);
-    });
+      .then((res) => {
+        setOrders(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, []);
 
   const getImageUrl = (photoPath) => {
-    if (!photoPath) return 'https://placehold.net/600x400.png';
+    // If it's already a full Cloudinary URL, return as-is
+    if (!photoPath) return 'https://via.placeholder.com/100x150?text=No+Image';
+    if (photoPath.startsWith('http')) return photoPath;
+
+    // Otherwise fallback to backend-hosted path
     return `${import.meta.env.VITE_BACKEND_URL}/${photoPath.replace(/\\/g, '/')}`;
   };
 
@@ -50,8 +54,8 @@ const ProfileOrders = () => {
                 {order.items.map((item) => (
                   <li key={item.productId} className="order-item">
                     <img
-                      src={getImageUrl(item.productPhoto)}
-                      alt={item.productName}
+                      src={getImageUrl(item.productId?.productPhoto)}
+                      alt={item.productId?.productName}
                       className="item-photo"
                       onError={(e) => {
                         if (!e.target.dataset.fallback) {
@@ -60,14 +64,16 @@ const ProfileOrders = () => {
                         }
                       }}
                     />
+
                     <div>
-                      <p className="item-name">{item.productName}</p>
+                      <p className="item-name">{item.productId?.productName}</p>
                       <p className="item-details">
                         Quantity: {item.quantity} <br />
-                        Price: ₹{item.productCost} <br />
-                        Total: ₹{item.productCost * item.quantity}
+                        Price: ₹{item.productId?.productCost} <br />
+                        Total: ₹{(item.productId?.productCost || 0) * item.quantity}
                       </p>
                     </div>
+
                   </li>
                 ))}
               </ul>

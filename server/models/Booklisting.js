@@ -5,6 +5,10 @@ const bookListingSchema = new mongoose.Schema({
     type: String, // You can store the image as a URL or a file path
     required: true
   },
+  photoPublicId: {
+    type: String, // This can be used to delete the image from Cloudinary later
+    required: true
+  },
   productName: {
     type: String,
     required: true

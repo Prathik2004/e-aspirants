@@ -71,10 +71,11 @@ const Cart = () => {
                   <li className="cart-item" key={item._id}>
                     <div className="cart-item-info">
                       <img
-                        src={`${import.meta.env.VITE_BACKEND_URL}/${item.productPhoto}`}
+                        src={item.productPhoto}
                         alt={item.productName}
                         className="cart-item-img"
                         onError={(e) => {
+                          e.target.onerror = null;
                           e.target.src = 'https://via.placeholder.com/100x150?text=No+Image';
                         }}
                       />
