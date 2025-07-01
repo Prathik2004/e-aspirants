@@ -10,7 +10,6 @@ const Auth = () => {
   const toggleForm = () => setIsLogin(!isLogin);
   const navigate = useNavigate();
 
-  // Form states
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({
     name: '',
@@ -21,7 +20,6 @@ const Auth = () => {
     profilePhoto: null,
   });
 
-  // Handle input changes
   const handleLoginChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
   };
@@ -35,15 +33,13 @@ const Auth = () => {
     }
   };
 
-
-  // Submit handlers
   const handleLoginSubmit = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
-        credentials: 'include', // ✅ ADD THI
+        credentials: 'include',
       });
 
       const result = await response.json();
@@ -60,10 +56,8 @@ const Auth = () => {
           cart: result.user.cart,
         });
 
-        navigate('/'); // Redirect to home page
-      }
-
-      else {
+        navigate('/');
+      } else {
         alert(result.message || 'Login failed!');
       }
     } catch (error) {
@@ -71,7 +65,6 @@ const Auth = () => {
       alert('An error occurred during login.');
     }
   };
-
 
   const handleSignupSubmit = async () => {
     const formData = new FormData();
@@ -88,7 +81,7 @@ const Auth = () => {
       const result = await response.json();
       if (response.ok) {
         alert('Signup successful!');
-        setIsLogin(true); // Switch to login form
+        setIsLogin(true);
       } else {
         alert(result.message || 'Signup failed!');
       }
@@ -98,13 +91,11 @@ const Auth = () => {
     }
   };
 
-
   return (
     <>
       <Header />
       <div className="auth-container">
         <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
-
           {/* Login Form */}
           <div className="form login-form">
             <h2>Login</h2>
@@ -112,29 +103,24 @@ const Auth = () => {
             <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
             <button className="auth-btn" onClick={handleLoginSubmit}>Login</button>
             <p className="toggle-text">
-              Don't have an account?{' '}
-              <span onClick={toggleForm}>Sign Up</span>
+              Don't have an account? <span onClick={toggleForm}>Sign Up</span>
             </p>
           </div>
 
           {/* Signup Form */}
           <div className="form signup-form">
-            <h2>Sign Up</h2>
+            <h2>Create Account</h2>
             <input type="text" name="name" placeholder="Full Name" value={signupData.name} onChange={handleSignupChange} />
             <input type="email" name="email" placeholder="Email" value={signupData.email} onChange={handleSignupChange} />
             <input type="password" name="password" placeholder="Password" value={signupData.password} onChange={handleSignupChange} />
-            <input type="number" name="number" placeholder="Contact number" value={signupData.number} onChange={handleSignupChange} />
-
+            <input type="number" name="number" placeholder="Contact Number" value={signupData.number} onChange={handleSignupChange} />
             <input type="text" name="address" placeholder="Address" value={signupData.address} onChange={handleSignupChange} />
             <input type="file" name="profilePhoto" accept="image/*" onChange={handleSignupChange} />
-
             <button className="auth-btn" onClick={handleSignupSubmit}>Sign Up</button>
             <p className="toggle-text">
-              Already have an account?{' '}
-              <span onClick={toggleForm}>Login</span>
+              Already have an account? <span onClick={toggleForm}>Login</span>
             </p>
           </div>
-
         </div>
       </div>
     </>

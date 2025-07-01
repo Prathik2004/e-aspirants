@@ -1,35 +1,37 @@
 .auth-container {
   height: 100vh;
   width: 100%;
-  background-color: rgba(36,36,36);
+  background: linear-gradient(to right, #1e1e1e, #2e2e2e);
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-family: "Zilla Slab", serif;
+  align-items: flex-start;
+  padding-top: 60px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .form-wrapper {
   position: relative;
-  width: 350px;
-  height: 420px;
+  width: 380px;
+  min-height: 500px;
+  background-color: #292929;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #ff6837;
+  transition: height 0.3s ease-in-out;
 }
 
 .form {
   position: absolute;
   width: 100%;
-  height: 100%;
-  padding: 30px;
+  min-height: 100%;
+  padding: 30px 25px;
   box-sizing: border-box;
-  background-color: #1e1e1e;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 15px;
+  color: #fff;
   transition: transform 0.5s ease-in-out;
-  color: white;
 }
 
 .login-form {
@@ -52,28 +54,56 @@
   z-index: 2;
 }
 
+.form h2 {
+  text-align: center;
+  color: #ff6837;
+  margin-bottom: 0px;
+  position: relative;
+  bottom: 15px;
+}
+
 input {
-  padding: 10px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  background-color: #2e2e2e;
+  position: relative;
+  bottom: 15px;
+  padding: 10px 12px;
+  background-color: #383838;
+  border: 1px solid #555;
+  border-radius: 8px;
   color: white;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #ff6837;
+  outline: none;
+  background-color: #444;
 }
 
 .auth-btn {
-  padding: 10px;
+  position: relative;
+  bottom: 15px;
+  padding: 12px;
   background-color: #ff6837;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-btn:hover {
+  background-color: #e55b2d;
 }
 
 .toggle-text {
+  position: relative;
+  bottom: 15px;
   text-align: center;
   font-size: 14px;
+  color: #ccc;
   margin-top: 10px;
 }
 
@@ -81,4 +111,9 @@ input {
   color: #ff6837;
   cursor: pointer;
   font-weight: bold;
+  transition: color 0.2s;
+}
+
+.toggle-text span:hover {
+  color: #ffa07a;
 }
