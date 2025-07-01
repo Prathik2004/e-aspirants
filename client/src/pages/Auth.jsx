@@ -12,7 +12,14 @@ const Auth = () => {
 
   // Form states
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [signupData, setSignupData] = useState({ name: '', email: '', password: '', number: '' });
+  const [signupData, setSignupData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    number: '',
+    address: '',
+    profilePhoto: null,
+  });
 
   // Handle input changes
   const handleLoginChange = (e) => {
@@ -20,8 +27,14 @@ const Auth = () => {
   };
 
   const handleSignupChange = (e) => {
-    setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    const { name, value, files } = e.target;
+    if (name === 'profilePhoto') {
+      setSignupData({ ...signupData, profilePhoto: files[0] });
+    } else {
+      setSignupData({ ...signupData, [name]: value });
+    }
   };
+
 
   // Submit handlers
   const handleLoginSubmit = async () => {
@@ -31,93 +44,101 @@ const Auth = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
         credentials: 'include', // ✅ ADD THI
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      alert('Login successful!');
-      localStorage.setItem('token', result.token);
-      localStorage.setItem('user', JSON.stringify(result.user));
-
-      setUserAndCart({
-        id: result.user.id,
-        name: result.user.name,
-        email: result.user.email,
-        token: result.token,
-        cart: result.user.cart,
       });
 
-      navigate('/'); // Redirect to home page
+      const result = await response.json();
+      if (response.ok) {
+        alert('Login successful!');
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
+
+        setUserAndCart({
+          id: result.user.id,
+          name: result.user.name,
+          email: result.user.email,
+          token: result.token,
+          cart: result.user.cart,
+        });
+
+        navigate('/'); // Redirect to home page
+      }
+
+      else {
+        alert(result.message || 'Login failed!');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('An error occurred during login.');
+    }
+  };
+
+
+  const handleSignupSubmit = async () => {
+    const formData = new FormData();
+    for (const key in signupData) {
+      formData.append(key, signupData[key]);
     }
 
-    else {
-      alert(result.message || 'Login failed!');
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signup`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert('Signup successful!');
+        setIsLogin(true); // Switch to login form
+      } else {
+        alert(result.message || 'Signup failed!');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('An error occurred during signup.');
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    alert('An error occurred during login.');
-  }
-};
+  };
 
 
-const handleSignupSubmit = async () => {
-  try {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(signupData),
-    });
+  return (
+    <>
+      <Header />
+      <div className="auth-container">
+        <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
 
-    const result = await response.json();
-    if (response.ok) {
-      alert('Signup successful!');
-      console.log(result);
-      setIsLogin(true); // Switch to login form
-    } else {
-      alert(result.message || 'Signup failed!');
-    }
-  } catch (error) {
-    console.error('Signup error:', error);
-    alert('An error occurred during signup.');
-  }
-};
+          {/* Login Form */}
+          <div className="form login-form">
+            <h2>Login</h2>
+            <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
+            <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
+            <button className="auth-btn" onClick={handleLoginSubmit}>Login</button>
+            <p className="toggle-text">
+              Don't have an account?{' '}
+              <span onClick={toggleForm}>Sign Up</span>
+            </p>
+          </div>
 
-return (
-  <>
-    <Header />
-    <div className="auth-container">
-      <div className={`form-wrapper ${isLogin ? 'show-login' : 'show-signup'}`}>
+          {/* Signup Form */}
+          <div className="form signup-form">
+            <h2>Sign Up</h2>
+            <input type="text" name="name" placeholder="Full Name" value={signupData.name} onChange={handleSignupChange} />
+            <input type="email" name="email" placeholder="Email" value={signupData.email} onChange={handleSignupChange} />
+            <input type="password" name="password" placeholder="Password" value={signupData.password} onChange={handleSignupChange} />
+            <input type="number" name="number" placeholder="Contact number" value={signupData.number} onChange={handleSignupChange} />
 
-        {/* Login Form */}
-        <div className="form login-form">
-          <h2>Login</h2>
-          <input type="email" name="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} />
-          <input type="password" name="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} />
-          <button className="auth-btn" onClick={handleLoginSubmit}>Login</button>
-          <p className="toggle-text">
-            Don't have an account?{' '}
-            <span onClick={toggleForm}>Sign Up</span>
-          </p>
+            <input type="text" name="address" placeholder="Address" value={signupData.address} onChange={handleSignupChange} />
+            <input type="file" name="profilePhoto" accept="image/*" onChange={handleSignupChange} />
+
+            <button className="auth-btn" onClick={handleSignupSubmit}>Sign Up</button>
+            <p className="toggle-text">
+              Already have an account?{' '}
+              <span onClick={toggleForm}>Login</span>
+            </p>
+          </div>
+
         </div>
-
-        {/* Signup Form */}
-        <div className="form signup-form">
-          <h2>Sign Up</h2>
-          <input type="text" name="name" placeholder="Full Name" value={signupData.name} onChange={handleSignupChange} />
-          <input type="email" name="email" placeholder="Email" value={signupData.email} onChange={handleSignupChange} />
-          <input type="password" name="password" placeholder="Password" value={signupData.password} onChange={handleSignupChange} />
-          <input type="number" name="number" placeholder="Contact number" value={signupData.number} onChange={handleSignupChange} />
-          <button className="auth-btn" onClick={handleSignupSubmit}>Sign Up</button>
-          <p className="toggle-text">
-            Already have an account?{' '}
-            <span onClick={toggleForm}>Login</span>
-          </p>
-        </div>
-
       </div>
-    </div>
-  </>
-);
+    </>
+  );
 };
 
 export default Auth;

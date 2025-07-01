@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 
 require('dotenv').config();
-const { storage }    = require('./config/cloudinary');
+const { getCloudinaryStorage } = require('./config/cloudinary');
 
 const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
@@ -38,10 +38,11 @@ app.use(express.json());
 // Serve uploaded images statically
 app.use(cookieParser());
 
-const upload = multer({ storage });
+const bookUpload = multer({ storage: getCloudinaryStorage('booklistings') });
+const profileUpload = multer({ storage: getCloudinaryStorage('profile-pics') });
 
 
-app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
+app.post('/api/sell-book', bookUpload.single('productPhoto'), async (req, res) => {
   try {
       // 1) req.body contains all your text fields
       const bookData = { ...req.body };
@@ -73,29 +74,27 @@ app.post('/api/sell-book', upload.single('productPhoto'), async (req, res) => {
 
 
 // Signup route
-app.post('/api/signup', async (req, res) => {
-  const { name, email, password, number } = req.body;
+app.post('/api/signup', profileUpload.single('profilePhoto'), async (req, res) => {
+  const { name, email, password, number, address } = req.body;
 
   try {
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: 'Email already registered' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new user
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
       number,
-      cart: [], // Initialize empty cart
+      address,
+      profilePhoto: req.file ? req.file.path : '', // ✅ Save Cloudinary image URL
+      cart: [],
     });
 
-    // Save to DB
     await newUser.save();
 
     res.status(201).json({ message: 'Signup successful', user: { name, email } });
@@ -104,7 +103,6 @@ app.post('/api/signup', async (req, res) => {
     res.status(500).json({ message: 'Failed to register user' });
   }
 });
-
 
 // Login route
 app.post('/api/login', async (req, res) => {
@@ -250,6 +248,23 @@ app.get('/api/my-orders', authMiddleware, async (req, res) => {
   } catch (error) {
     console.error('Fetch orders error:', error);
     res.status(500).json({ message: 'Failed to fetch orders' });
+  }
+});
+
+app.put('/api/user/profile', authMiddleware, profileUpload.single('profilePhoto'), async (req, res) => {
+  try {
+    const { name, email, number, address } = req.body;
+    const updateData = { name, email, number, address };
+
+    if (req.file) {
+      updateData.profilePhoto = req.file.path;
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.id, updateData, { new: true });
+    res.status(200).json({ message: 'Profile updated', user });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ message: 'Failed to update profile' });
   }
 });
 
