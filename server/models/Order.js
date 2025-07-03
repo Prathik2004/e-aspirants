@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'authorization', // This links to your User model
+    ref: 'authorization',
     required: true,
   },
   items: [
@@ -23,6 +23,37 @@ const orderSchema = new mongoose.Schema({
   orderedAt: {
     type: Date,
     default: Date.now,
+  },
+
+  // ✅ Tracking Features
+  trackingId: {
+    type: String,
+    default: '',
+  },
+  courierName: {
+    type: String,
+    default: '',
+  },
+  trackingStatus: {
+    type: String,
+    enum: ['Pending', 'Shipped', 'In Transit', 'Out for Delivery', 'Delivered', 'Cancelled'],
+    default: 'Pending',
+  },
+  trackingHistory: [
+    {
+      status: String,
+      location: String,
+      timestamp: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
+
+  // ✅ Optional: Delivery coordinates for map tracking
+  deliveryCoordinates: {
+    lat: Number,
+    lng: Number,
   },
 });
 

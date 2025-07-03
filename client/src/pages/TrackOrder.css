@@ -1,0 +1,100 @@
+.track-container {
+  display: flex;
+  justify-content: center;
+  padding: 30px 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.track-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 100%;
+}
+
+.track-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.order-id {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.shipment-info p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.progress-tracker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+  position: relative;
+}
+
+.progress-tracker::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background-color: #e0e0e0;
+  z-index: 0;
+}
+
+.step {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.step .circle {
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 50%;
+  margin: 0 auto 8px;
+  line-height: 40px;
+  color: white;
+  font-weight: bold;
+}
+
+.step.active .circle {
+  background-color: #28a745;
+}
+
+.step p {
+  font-size: 14px;
+  margin-top: 0;
+  color: #555;
+}
+
+.history-title {
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  font-size: 15px;
+  color: #444;
+}
+
+.history-list li {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}

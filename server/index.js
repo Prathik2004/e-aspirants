@@ -251,6 +251,20 @@ app.get('/api/my-orders', authMiddleware, async (req, res) => {
   }
 });
 
+// GET /api/orders/:id
+app.get('/api/orders/:id', authMiddleware, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order || order.user.toString() !== req.user.id)
+      return res.status(404).json({ message: 'Order not found' });
+
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 app.put('/api/user/profile', authMiddleware, profileUpload.single('profilePhoto'), async (req, res) => {
   try {
     const { name, email, number, address } = req.body;
@@ -265,6 +279,40 @@ app.put('/api/user/profile', authMiddleware, profileUpload.single('profilePhoto'
   } catch (error) {
     console.error('Profile update error:', error);
     res.status(500).json({ message: 'Failed to update profile' });
+  }
+});
+
+app.post('/update-tracking/:orderId', /* isAdmin, */ async (req, res) => {
+  const { trackingId, courierName, status, location, lat, lng } = req.body;
+
+  try {
+    const order = await Order.findById(req.params.orderId);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (trackingId) order.trackingId = trackingId;
+    if (courierName) order.courierName = courierName;
+    if (status) order.trackingStatus = status;
+
+    // Push tracking history entry
+    if (status && location) {
+      order.trackingHistory.push({
+        status,
+        location,
+        timestamp: new Date()
+      });
+    }
+
+    // Optional map data
+    if (lat && lng) {
+      order.deliveryCoordinates = { lat, lng };
+    }
+
+    await order.save();
+    res.status(200).json({ message: 'Tracking updated successfully', order });
+
+  } catch (err) {
+    console.error('Tracking update error:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import './ProfileOrders.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const ProfileOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/my-orders`, {
@@ -48,8 +53,15 @@ const ProfileOrders = () => {
                   <p><strong>Total:</strong> ₹{order.totalAmount}</p>
                   <p><strong>Payment:</strong> {order.paymentMethod}</p>
                   <p><strong>Address:</strong> {order.address}</p>
+                  <button
+                    className="track-btn"
+                    onClick={() => navigate(`/track-order/${order._id}`)}
+                  >
+                    Track Order
+                  </button>
                 </div>
               </div>
+
               <ul className="order-items">
                 {order.items.map((item) => (
                   <li key={item.productId} className="order-item">

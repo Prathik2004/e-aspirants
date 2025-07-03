@@ -10,6 +10,8 @@ import ProfileOrders from './pages/ProfileOrders'
 import Profile from './pages/Profile'
 import Cart from './components/Cart'
 import Checkout from './components/Checkout'
+import TrackOrder from './pages/TrackOrder'
+import UpdateTracking from './pages/UpdateTracking'
 //import { SpeedInsights } from '@vercel/speed-insights/react';
 
 
@@ -27,6 +29,8 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path='/profileorders' element={<ProfileOrders />} />
           <Route path='/checkout' element={<Checkout />} />
+           <Route path="/track-order/:orderId" element={<TrackOrder />} />
+           <Route path='/update-tracking' element={<UpdateTracking />} />
           </Routes>
       </BrowserRouter>
     </>
