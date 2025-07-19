@@ -39,6 +39,8 @@
 
 .contact-input,
 .contact-textarea {
+  position: relative;
+  top: 5px;
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;

@@ -12,6 +12,9 @@ import Cart from './components/Cart'
 import Checkout from './components/Checkout'
 import TrackOrder from './pages/TrackOrder'
 import UpdateTracking from './pages/UpdateTracking'
+import AdminDashboard from './admin/AdminDashboard'
+import AdminOrder from './admin/AdminOrders'
+import AdminUser from './admin/AdminUser'
 //import { SpeedInsights } from '@vercel/speed-insights/react';
 
 
@@ -31,6 +34,10 @@ function App() {
           <Route path='/checkout' element={<Checkout />} />
            <Route path="/track-order/:orderId" element={<TrackOrder />} />
            <Route path='/update-tracking' element={<UpdateTracking />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/orders" element={<AdminOrder />} />
+          <Route path="/admin/users" element={<AdminUser />} />
+          {/* <Route path="/speed-insights" element={<SpeedInsights />} /> */}
           </Routes>
       </BrowserRouter>
     </>

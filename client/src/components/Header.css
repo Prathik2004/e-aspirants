@@ -19,13 +19,17 @@
 .header-cart{
     grid-area: cart;
     align-content: center;
-    margin-left: 200px;
+    margin-left: 150px;
 }
+
 .header-login {
+  font-size: 0px;
     grid-area: login;
+    position: relative;
+    right: 10px;
 }
 .header-login span {
-    font-size: 17px;
+    font-size: 14px;
     font-family: "Permanent Marker", cursive;
     font-weight: 200;
     font-style: normal;
@@ -59,7 +63,7 @@
 }
 .header-dropdown {
   position: absolute;
-  right: 0;
+  right: 10px;
   background-color: #333;
   border: 1px solid #444;
   border-radius: 4px;

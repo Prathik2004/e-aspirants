@@ -1,8 +1,8 @@
 .track-container {
   display: flex;
   justify-content: center;
-  padding: 30px 20px;
-  background-color: #f9f9f9;
+  padding: 40px 20px;
+  background: linear-gradient(to right, #f5f7fa, #c3cfe2);
   min-height: 100vh;
 }
 
@@ -10,80 +10,97 @@
   background: white;
   padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  max-width: 900px;
   width: 100%;
+  animation: fadeIn 0.5s ease;
 }
 
 .track-title {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #333;
+  font-size: 30px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 8px;
 }
 
 .order-id {
-  color: #777;
-  margin-bottom: 20px;
+  color: #7f8c8d;
+  font-size: 15px;
+  margin-bottom: 24px;
 }
 
 .shipment-info p {
-  margin: 5px 0;
+  margin: 6px 0;
   font-size: 16px;
+  color: #34495e;
 }
 
 .progress-tracker {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin: 30px 0;
+  align-items: flex-start;
   position: relative;
+  margin: 40px 0 30px;
 }
 
 .progress-tracker::before {
   content: '';
   position: absolute;
-  top: 22px;
-  left: 5%;
-  right: 5%;
+  top: 28px;
+  left: 6%;
+  right: 6%;
   height: 4px;
   background-color: #e0e0e0;
   z-index: 0;
+  border-radius: 2px;
 }
 
 .step {
   text-align: center;
-  position: relative;
-  z-index: 1;
   width: 100%;
+  z-index: 2;
+  position: relative;
 }
 
-.step .circle {
-  width: 40px;
-  height: 40px;
-  background-color: #ddd;
-  border-radius: 50%;
-  margin: 0 auto 8px;
-  line-height: 40px;
+.step .icon {
+  width: 48px;
+  height: 48px;
+  background-color: #ccc;
   color: white;
-  font-weight: bold;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.step.active .circle {
-  background-color: #28a745;
+.step.active .icon {
+  background-color: #27ae60;
 }
 
 .step p {
-  font-size: 14px;
-  margin-top: 0;
+  font-size: 13px;
   color: #555;
+  margin: 0;
+}
+
+.map-wrapper {
+  margin: 30px 0;
+}
+
+.map-wrapper h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #2c3e50;
 }
 
 .history-title {
   font-size: 20px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  color: #333;
+  margin: 30px 0 10px;
+  font-weight: 600;
+  color: #34495e;
 }
 
 .history-list {
@@ -91,10 +108,17 @@
   padding: 0;
   font-size: 15px;
   color: #444;
+  line-height: 1.6;
 }
 
 .history-list li {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
+}
+
+/* Smooth entrance animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

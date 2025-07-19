@@ -189,7 +189,7 @@ app.post('/api/place-order', authMiddleware, async (req, res) => {
 
 
 // Get user profile route
-app.get('/user', authMiddleware, async (req, res) => {
+app.get('/api/user', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     res.status(200).json(user);
@@ -282,7 +282,9 @@ app.put('/api/user/profile', authMiddleware, profileUpload.single('profilePhoto'
   }
 });
 
-app.post('/update-tracking/:orderId', /* isAdmin, */ async (req, res) => {
+app.post('/update-tracking/:orderId', async (req, res) => {
+  console.log('Incoming tracking update:', req.body);
+
   const { trackingId, courierName, status, location, lat, lng } = req.body;
 
   try {
@@ -293,7 +295,6 @@ app.post('/update-tracking/:orderId', /* isAdmin, */ async (req, res) => {
     if (courierName) order.courierName = courierName;
     if (status) order.trackingStatus = status;
 
-    // Push tracking history entry
     if (status && location) {
       order.trackingHistory.push({
         status,
@@ -302,9 +303,12 @@ app.post('/update-tracking/:orderId', /* isAdmin, */ async (req, res) => {
       });
     }
 
-    // Optional map data
-    if (lat && lng) {
-      order.deliveryCoordinates = { lat, lng };
+    // 💡 Check lat/lng only if they are defined AND valid
+    const parsedLat = lat !== '' ? parseFloat(lat) : null;
+    const parsedLng = lng !== '' ? parseFloat(lng) : null;
+
+    if (!isNaN(parsedLat) && !isNaN(parsedLng)) {
+      order.deliveryCoordinates = { lat: parsedLat, lng: parsedLng };
     }
 
     await order.save();
@@ -312,6 +316,19 @@ app.post('/update-tracking/:orderId', /* isAdmin, */ async (req, res) => {
 
   } catch (err) {
     console.error('Tracking update error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+// GET /api/all-orders
+app.get('/api/all-orders', authMiddleware, async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .sort({ orderedAt: -1 })
+      .populate('user', 'name email'); // adjust fields
+    res.json(orders);
+  } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 });
