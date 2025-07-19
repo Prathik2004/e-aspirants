@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 .header-container {
-    
     background-color: rgb(36, 36, 36);
     color: white;
     display: grid;
@@ -80,7 +79,7 @@
 
 .header-dropdown li {
   padding: 10px 15px;
-  color: white;
+  color: black;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
