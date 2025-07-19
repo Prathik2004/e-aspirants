@@ -78,9 +78,9 @@ const Header = () => {
               {dropdownOpen && (
                 <div className="header-dropdown">
                   <ul>
-                    <li onClick={() => { navigate('/profile'); setDropdownOpen(false); }}>Profile</li>
-                    <li onClick={() => { navigate('/profileorders'); setDropdownOpen(false); }}>Orders</li>
-                    <li onClick={handleLogout}>Logout</li>
+                    <li onClick={() => { navigate('/profile'); setDropdownOpen(false);  }} style={{ color: 'white' }}>Profile</li>
+                    <li onClick={() => { navigate('/profileorders'); setDropdownOpen(false); }} style={{ color: 'white' }}>Orders</li>
+                    <li onClick={handleLogout} style={{ color: 'white' }}>Logout</li>
                   </ul>
                 </div>
               )}
