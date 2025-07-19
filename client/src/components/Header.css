@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 .header-container {
-    
     background-color: rgb(36, 36, 36);
     color: white;
     display: grid;
@@ -17,6 +16,9 @@
     margin-left: 100px;
 }
 .header-cart{
+    position: relative;
+    left: 20px;
+    top: 5px;
     grid-area: cart;
     align-content: center;
     margin-left: 150px;
@@ -30,15 +32,16 @@
 }
 .header-login span {
     font-size: 14px;
-    font-family: "Permanent Marker", cursive;
-    font-weight: 200;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 17px;
+    font-weight: 500;
     font-style: normal;
 }
 .header-navbar-list {
     cursor: pointer;
-    font-family: "Permanent Marker", cursive;
-    font-weight: 300;
-    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 18px;
     font-style: normal;
     list-style: none;
     display: flex;
