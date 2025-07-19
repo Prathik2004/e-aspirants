@@ -22,7 +22,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 connectDB();
 
 // Middleware
-const allowedOrigins = ['http://localhost:5173','https://e-aspirants.vercel.app'];
+const allowedOrigins = ['http://localhost:5173','https://e-aspirants-1.vercel.app/'];
 app.use(cors({
   origin(origin, cb) {
     if (!origin || allowedOrigins.includes(origin)) return cb(null,true);
