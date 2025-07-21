@@ -158,7 +158,12 @@ const BookListingForm = () => {
             <option value="">Select Category</option>
             <option value="NDA">NDA</option>
             <option value="CDS">CDS</option>
-            <option value="AFCAT">AFCAT</option>
+            <option value="AFCAT">AFCAT</option> 
+            <option value="SSB">SSB</option> 
+            <option value="NCERT">NCERT</option> 
+            <option value="NCC">NCC</option> 
+            <option value="OTA">OTA</option> 
+
           </select>
 
           <input
