@@ -40,7 +40,7 @@ const AdminOrder = () => {
 
   return (
     <div className="admin-order-container">
-      <h2>📦 Orders Management</h2>
+      <h2>📦 Order Management</h2>
 
       <div className="order-filters">
         <input
