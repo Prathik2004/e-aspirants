@@ -340,6 +340,15 @@ app.use((err, req, res, next) => {
      .json({ error: err.message || 'Internal Server Error' });
 });
 
+const __dirname = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 
 // Start server
 const PORT = process.env.PORT || 5000;
