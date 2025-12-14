@@ -8,7 +8,6 @@ const multer = require('multer');
 const upload = require("./config/multer");
 const cloudinary = require("./config/cloudinary");
 const streamifier = require("streamifier");
-const path = require('path');
 
 require('dotenv').config();
 
@@ -354,15 +353,6 @@ app.use((err, req, res, next) => {
     .json({ error: err.message || 'Internal Server Error' });
 });
 
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client", "build")));
-
-  app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
-
-}
 
 // Start server
 const PORT = process.env.PORT || 5000;
