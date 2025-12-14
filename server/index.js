@@ -5,9 +5,12 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
+const upload = require("./config/multer");
+const cloudinary = require("./config/cloudinary");
+const streamifier = require("streamifier");
+const path = require('path');
 
 require('dotenv').config();
-const { getCloudinaryStorage } = require('./config/cloudinary');
 
 const connectDB = require('./connection/connection');
 const User = require('./models/authorization');
@@ -22,15 +25,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 connectDB();
 
 // Middleware
-const allowedOrigins = ['http://localhost:5173','https://e-aspirants-1.vercel.app'];
+const allowedOrigins = ['http://localhost:5173', 'https://e-aspirants-1.vercel.app'];
 app.use(cors({
   origin(origin, cb) {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null,true);
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
     cb(new Error('Not allowed by CORS'), false);
   },
   credentials: true,
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -38,52 +41,63 @@ app.use(express.json());
 // Serve uploaded images statically
 app.use(cookieParser());
 
-const bookUpload = multer({ storage: getCloudinaryStorage('booklistings') });
-const profileUpload = multer({ storage: getCloudinaryStorage('profile-pics') });
-
-
-app.post('/api/sell-book', bookUpload.single('productPhoto'), async (req, res) => {
-  try {
-      // 1) req.body contains all your text fields
-      const bookData = { ...req.body };
-
-      // 2) ensure we got a file
-      if (!req.file) {
-        return res
-          .status(400)
-          .json({ error: 'Product photo is required' });
+const uploadToCloudinary = (buffer, folder) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
       }
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
 
-      // 3) multer-storage-cloudinary gives you the hosted URL
-      //    and the public_id for future deletes
-      bookData.productPhoto = req.file.path;          // e.g. https://res...
-      bookData.photoPublicId = req.file.filename || req.file.public_id;    // e.g. book-covers/123abc
 
-      // 4) save to Mongo
-      const newBook = new Booklisting(bookData);
-      await newBook.save();
+app.post("/api/sell-book", upload.single("productPhoto"), async (req, res) => {
+  try {
+    if (!req.file)
+      return res.status(400).json({ error: "Product photo required" });
 
-      // 5) return the full document (incl. photo URL)
-      res.status(201).json(newBook);
-    } catch (error) {
-      console.error('Error saving book:', error);
-      res.status(500).json({ error: 'Failed to list book' });
-    }
+    const result = await uploadToCloudinary(
+      req.file.buffer,
+      "booklistings"
+    );
+
+    const bookData = {
+      ...req.body,
+      productPhoto: result.secure_url,
+      photoPublicId: result.public_id,
+    };
+
+    const newBook = new Booklisting(bookData);
+    await newBook.save();
+
+    res.status(201).json(newBook);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to list book" });
   }
+}
 );
 
 
-// Signup route
-app.post('/api/signup', profileUpload.single('profilePhoto'), async (req, res) => {
-  const { name, email, password, number, address } = req.body;
 
+// Signup route
+app.post("/api/signup", upload.single("profilePhoto"), async (req, res) => {
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: 'Email already registered' });
-    }
+    const { name, email, password, number, address } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    let profilePhoto = "";
+    if (req.file) {
+      const result = await uploadToCloudinary(
+        req.file.buffer,
+        "profile-pics"
+      );
+      profilePhoto = result.secure_url;
+    }
 
     const newUser = new User({
       name,
@@ -91,18 +105,18 @@ app.post('/api/signup', profileUpload.single('profilePhoto'), async (req, res) =
       password: hashedPassword,
       number,
       address,
-      profilePhoto: req.file ? req.file.path : '', // ✅ Save Cloudinary image URL
+      profilePhoto,
       cart: [],
     });
 
     await newUser.save();
-
-    res.status(201).json({ message: 'Signup successful', user: { name, email } });
-  } catch (error) {
-    console.error('Signup error:', error);
-    res.status(500).json({ message: 'Failed to register user' });
+    res.status(201).json({ message: "Signup successful" });
+  } catch (err) {
+    res.status(500).json({ message: "Signup failed" });
   }
-});
+}
+);
+
 
 // Login route
 app.post('/api/login', async (req, res) => {
@@ -265,7 +279,7 @@ app.get('/api/orders/:id', authMiddleware, async (req, res) => {
 });
 
 
-app.put('/api/user/profile', authMiddleware, profileUpload.single('profilePhoto'), async (req, res) => {
+app.put('/api/user/profile', authMiddleware, upload.single('profilePhoto'), async (req, res) => {
   try {
     const { name, email, number, address } = req.body;
     const updateData = { name, email, number, address };
@@ -337,10 +351,9 @@ app.get('/api/all-orders', authMiddleware, async (req, res) => {
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500)
-     .json({ error: err.message || 'Internal Server Error' });
+    .json({ error: err.message || 'Internal Server Error' });
 });
 
-const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));

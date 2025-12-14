@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "cookie-parser": "^1.4.7"
+    "cloudinary": "^2.8.0",
+    "cookie-parser": "^1.4.7",
+    "multer": "^2.0.2"
   }
 }
