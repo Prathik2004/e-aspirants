@@ -29,7 +29,7 @@ const UpdateTracking = () => {
       });
       setMessage('✅ Tracking info updated');
     } catch (err) {
-      setMessage('❌ Error updating tracking info.');
+      setMessage('❌ Error updating tracking info !');
       console.error(err);
     }
   };
