@@ -27,7 +27,7 @@ const UpdateTracking = () => {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/update-tracking/${orderId}`, form, {
         withCredentials: true,
       });
-      setMessage('✅ Tracking info updated!');
+      setMessage('✅ Tracking info updated');
     } catch (err) {
       setMessage('❌ Error updating tracking info.');
       console.error(err);
